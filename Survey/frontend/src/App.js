@@ -1,9 +1,9 @@
-import Menu from './Menu/Menu';
+import Page from './route/Page';
 
 function App() {
   return (
     <div>
-      <Menu />
+      <Page />
     </div>
   );
 }

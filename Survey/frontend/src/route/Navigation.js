@@ -53,7 +53,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navigation = () => {
  
-  const pages = ['list', 'add', 'detail', 'user', 'soron'];
+  const pages = ['list', 'form', 'detail', 'user', 'soron'];
  
 
   return (

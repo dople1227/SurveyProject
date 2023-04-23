@@ -10,7 +10,6 @@ data = {
         {
           id: '35e9c3b6-70ae-400f-bc92-ad7de87e93b7',
           answerName: '11',
-          questionType: 'checkbox',
           isCheck: True,
         },
       ],

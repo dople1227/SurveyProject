@@ -45,17 +45,12 @@ class SurveySerializer(serializers.ModelSerializer):
         model = Survey
         fields = "__all__"
 
+    # 설문지 리스트에 각 설문지별 문항수 구해서 함께 보내주기
     questionCount = serializers.SerializerMethodField()
-
     def get_questionCount(self, obj):
         return obj.question_set.count()
 
     name = serializers.CharField(error_messages={"blank": "설문지명은 반드시 입력되어야 합니다."})
-
-    def validate_name(self, value):
-        if not value.strip():
-            raise serializers.ValidationError("설문지명은 반드시 입력되어야 합니다.")
-        return value
 
 
 # Question

@@ -8,7 +8,7 @@ update: PUT 요청으로 기존 리소스 수정
 delete: DELETE 요청으로 기존 리소스 삭제
 """
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from django.shortcuts import render
 from .serializers import (
     SurveySerializer,
@@ -27,6 +27,7 @@ import logging
 from django.db import transaction
 from rest_framework.response import Response as DRFResponse
 from django.db.models import Count
+from django.http import JsonResponse
 
 
 def survey_list(request):
@@ -41,6 +42,39 @@ class SurveyViewSet(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
 
+    # 특정 SurveyId의 정보 GET요청
+    def retrieve(self, request, pk=None):
+        # Survey 테이블에서 surveyId에 해당하는정보 가져옴
+        survey = self.get_object()
+        # Question 테이블에서 surveyId에 해당하는정보 가져옴
+        questions = Question.objects.filter(surveyId=survey.pk)
+        # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 가져옴
+        answers = Answer.objects.filter(questionId__in=questions)
+
+        response_data = {
+            "surveyName": survey.name,
+            "questions": [],
+        }
+        for question in questions:
+            answer_data = []
+            for answer in answers.filter(questionId=question):
+                answer_data.append(
+                    {
+                        "answerId": answer.answerId,
+                        "answerName": answer.name,
+                        "isCheck": answer.isCheck,
+                    }
+                )
+            response_data["questions"].append(
+                {
+                    "questionId": question.questionId,
+                    "questionName": question.name,
+                    "questionType": question.type,
+                    "answers": answer_data,
+                }
+            )
+        return JsonResponse(response_data)
+
     # POST요청 시
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -50,7 +84,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
             survey_serializer.is_valid(raise_exception=True)
             survey_instance = survey_serializer.save()
 
-            # Question, Answer, Response
+            # Question, Answer
             questions_data = data.get("questions", [])
             for question_data in questions_data:
                 question_serializer = QuestionSerializer(
@@ -74,7 +108,12 @@ class SurveyViewSet(viewsets.ModelViewSet):
                     )
                     answer_serializer.is_valid(raise_exception=True)
                     answer_instance = answer_serializer.save()
+        return DRFResponse({"successMessage": "설문지가 정상적으로 등록되었습니다."})
 
+    # POST요청 시
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        # with transaction.atomic():
         return DRFResponse({"successMessage": "설문지가 정상적으로 등록되었습니다."})
 
 

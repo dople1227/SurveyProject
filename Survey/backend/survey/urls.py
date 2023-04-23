@@ -14,6 +14,7 @@ router.register(r"response", views.ResponseViewSet)
 
 urlpatterns = [
     path("", views.survey_list, name="survey_list"),
+    # api/내에 router에 등록된 경로들을 모두 등록
     path("api/", include(router.urls)),
     # add 경로에 대한 라우팅
     path("add/", TemplateView.as_view(template_name="index.html"), name="add"),

@@ -1,16 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import QuestionList from './QuestionList';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+import { useParams } from 'react-router-dom';
 
 // 설문지에 대한 정보와 문항을 관리하는 컴포넌트
 function SurveyForm() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [surveyName, setSurveyName] = useState('');
   const [localStateSurvey, setLocalStateSurvey] = useState();
+  const [isEdit, setIsEdit] = useState(false);
+  const { id } = useParams();
+
+  // 파라미터가 변경될 때만 실행
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        setLoading(true);
+        setIsEdit(true);
+        const url = `http://localhost:8000/api/survey/${id}/`;
+        try {
+          const response = await axios.get(url);
+          console.log(response);
+          const { surveyName, questions } = response.data;
+          setSurveyName(surveyName);
+          setLocalStateSurvey(questions);
+        } catch (e) {
+          setError(e);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchData();
+  }, [id]);
 
   // 자식컴포넌트(질문,선택지)의 상태변경 시
   const handleQuestionsChange = (updatedSurvey) => {
-    console.log(updatedSurvey);
     setLocalStateSurvey(updatedSurvey);
   };
 
@@ -23,21 +49,23 @@ function SurveyForm() {
   // submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const api = axios.create({
-      xsrfCookieName: 'XSRF-TOKEN',
-      xsrfHeaderName: 'X-CSRFToken',
-    });
 
     // 요청할 데이터 SET
-    const url = 'http://localhost:8000/api/survey/';
+    const url = isEdit
+      ? `http://localhost:8000/api/survey/${id}/`
+      : 'http://localhost:8000/api/survey/';
+    const method = isEdit ? 'put' : 'post';
+
     const data = {
       surveyName: surveyName,
       questions: localStateSurvey,
     };
 
+    /*  미구현 */
+
     // axios.post 요청 보내기
     try {
-      const response = await api.post(url, data);
+      const response = await axios[method](url, data);
       alert('설문지가 생성되었습니다.');
       console.log('API 요청 성공:', response.data);
     } catch (error) {
@@ -63,6 +91,9 @@ function SurveyForm() {
     }
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div className="px-10 py-5">
       <form onSubmit={handleSubmit}>
@@ -78,16 +109,6 @@ function SurveyForm() {
                 className="border border-gray-300 focus:outline-none focus:border-blue-700"
               />
             </div>
-            {/* <div className="flex flex-col basis-1/4">
-              <label className="mb-1 font-semibold">선택자 전화번호</label>
-              <input
-                type="text"
-                placeholder="응답자 전화번호"
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
-                className="border border-gray-300 focus:outline-none focus:border-blue-700"
-              />
-            </div> */}
           </div>
           <QuestionList handleQuestionsChange={handleQuestionsChange} />
         </div>
