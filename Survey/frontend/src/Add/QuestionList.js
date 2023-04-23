@@ -1,48 +1,62 @@
 import React, { useState } from 'react';
 import QuestionItem from './QuestionItem';
+import { v4 as uuidv4 } from 'uuid';
 
-// 문항들을 관리하는 컴포넌트
-function QuestionList() {
-  const [questions, setQuestions] = useState([]);
+// 질문들을 관리하는 컴포넌트
+function QuestionList({ handleQuestionsChange }) {
+  const [localQuestionList, setLocalQuestionList] = useState([]);
 
+  // 질문 추가
   const addQuestion = () => {
     const newQuestion = {
-      id: Date.now(),
-      title: '',
-      type: 'checkbox',
-      options: [],
+      id: uuidv4(),
+      questionName: '',
+      questionType: 'checkbox',
+      answers: [],
     };
-    setQuestions([...questions, newQuestion]);
+    const updatedQuestionList = [...localQuestionList, newQuestion];
+    setLocalQuestionList(updatedQuestionList);
+    handleQuestionsChange(updatedQuestionList);
   };
 
-  //문항 삭제
+  // 질문 삭제
   const deleteQuestion = (id) => {
-    setQuestions(questions.filter((question) => question.id !== id));
+    const updatedQuestionList = localQuestionList.filter(
+      (question) => question.id !== id,
+    );
+    setLocalQuestionList(updatedQuestionList);
+    handleQuestionsChange(updatedQuestionList);
   };
 
-  //답변리스트의 변경된 상태를 반영
-  const updateQuestion = (id, updatedQuestion) => {
-    setQuestions(
-      questions.map((question) =>
-        question.id === id ? updatedQuestion : question,
-      ),
+  // 질문리스트 변경 시
+  const handleQuestions = (id, updatedQuestion) => {
+    const updatedQuestions = localQuestionList.map((question) =>
+      question.id === id ? updatedQuestion : question,
     );
+    setLocalQuestionList(updatedQuestions);
+    handleQuestionsChange(updatedQuestions);
   };
 
   return (
-    <div>
-      <button type="button" onClick={addQuestion}>
-        문항 추가
+    <span className="">
+      <button
+        type="button"
+        onClick={addQuestion}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-2 py-2  "
+      >
+        질문추가
       </button>
-      {questions.map((question) => (
-        <QuestionItem
-          key={question.id}
-          question={question}
-          deleteQuestion={deleteQuestion}
-          updateQuestion={updateQuestion}
-        />
+      {localQuestionList.map((question) => (
+        <div className="flex flex-row">
+          <QuestionItem
+            key={question.id}
+            question={question}
+            deleteQuestion={deleteQuestion}
+            handleQuestions={handleQuestions}
+          />
+        </div>
       ))}
-    </div>
+    </span>
   );
 }
 

@@ -1,50 +1,68 @@
 import React, { useState } from 'react';
-import OptionList from './OptionList';
+import AnswerList from './AnswerList';
 
-// 개별 문항을 표시하고 수정하는 컴포넌트
-function QuestionItem({ question, deleteQuestion, updateQuestion }) {
-  // 문항제목 배열
-  const [title, setTitle] = useState(question.title);
-  // 문항유형 배열 (체크박스/라디오/셀렉트)
-  const [type, setType] = useState(question.type);
-  // 답변리스트 배열
-  const [options, setOptions] = useState(question.options);
+// 개별 질문을 표시하고 수정하는 컴포넌트
+function QuestionItem({ question, deleteQuestion, handleQuestions }) {
+  // 질문제목 배열
+  const [questionName, setQuestionName] = useState(question.questionName);
+  // 질문유형 배열 (체크박스/라디오/셀렉트)
+  const [questionType, setQuestionType] = useState(question.questionType);
+  // 선택지리스트 배열
+  const [answers, setAnswers] = useState(question.answers);
 
-  // 문항제목 변경 시 이벤트
+  // 질문제목 변경 시 이벤트
   const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-    updateQuestion(question.id, { ...question, title: e.target.value });
+    setQuestionName(e.target.value);
+    handleQuestions(question.id, { ...question, questionName: e.target.value });
   };
 
-  // 문항타입 변경 시 이벤트 (셀렉트박스)
+  // 질문타입 변경 시 이벤트 (셀렉트박스)
   const handleTypeChange = (e) => {
-    setType(e.target.value);
-    updateQuestion(question.id, { ...question, type: e.target.value });
+    setQuestionType(e.target.value);
+    handleQuestions(question.id, { ...question, questionType: e.target.value });
   };
 
-  // 답변리스트변경 시 이벤트
-  const updateOptions = (updatedOptions) => {
-    setOptions(updatedOptions);
-    updateQuestion(question.id, { ...question, options: updatedOptions });
+  // 선택지리스트변경 시 이벤트
+  const handleAnswersChange = (updatedAnswers) => {
+    setAnswers(updatedAnswers);
+    handleQuestions(question.id, { ...question, answers: updatedAnswers });
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="문항 제목"
-        value={title}
-        onChange={handleTitleChange}
-      />
-      <select value={type} onChange={handleTypeChange}>
-        <option value="checkbox">Checkbox</option>
-        <option value="radio">Radio</option>
-        <option value="select">Select</option>
-      </select>
-      <OptionList type={type} options={options} updateOptions={updateOptions} />
-      <button type="button" onClick={() => deleteQuestion(question.id)}>
-        문항 삭제
-      </button>
+    <div className="">
+      <div className="mt-14 flex flex-wrap">
+        <div className=" flex-col mb-2">
+          <input
+            type="text"
+            placeholder="질문을 입력하세요"
+            value={questionName}
+            onChange={handleTitleChange}
+            className="border border-gray-300 focus:outline-none focus:border-blue-700 mr-2"
+          />
+          <button
+            type="button"
+            onClick={() => deleteQuestion(question.id)}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-1 "
+          >
+            질문삭제
+          </button>
+        </div>
+        <div className="ml-1 mr-1">
+          <select value={questionType} onChange={handleTypeChange}>
+            <option value="checkbox">Checkbox</option>
+            <option value="radio">Radio</option>
+            <option value="select">Select</option>
+          </select>
+        </div>
+        <div className="">
+          <AnswerList
+            questionType={questionType}
+            answers={answers}
+            handleAnswersChange={handleAnswersChange}
+            questionId={question.id}
+          />
+        </div>
+      </div>
     </div>
   );
 }
