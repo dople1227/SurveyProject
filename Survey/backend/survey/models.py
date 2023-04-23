@@ -28,6 +28,7 @@ class Question(models.Model):
 class Answer(models.Model):
     answerId = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
+    isCheck = models.BooleanField()
     questionId = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -45,7 +46,7 @@ class Respondent(models.Model):
 
 class Response(models.Model):
     responseId = models.AutoField(primary_key=True)
-    isCheck = models.BooleanField()
+
     surveyId = models.ForeignKey(Survey, on_delete=models.CASCADE)
     respondentId = models.ForeignKey(Respondent, on_delete=models.CASCADE)
     questionId = models.ForeignKey(Question, on_delete=models.CASCADE)

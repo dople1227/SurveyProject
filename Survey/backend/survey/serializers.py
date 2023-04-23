@@ -50,13 +50,6 @@ class SurveySerializer(serializers.ModelSerializer):
     def get_questionCount(self, obj):
         return obj.question_set.count()
 
-    # def to_representation(self, instance):
-    #     """
-    #     조인된 Question 모델을 QuestionSerializer로 처리합니다.
-    #     """
-    #     self.fields["question_set"] = QuestionSerializer(many=True, read_only=True)
-    #     return super().to_representation(instance)
-
     name = serializers.CharField(error_messages={"blank": "설문지명은 반드시 입력되어야 합니다."})
 
     def validate_name(self, value):
@@ -87,17 +80,17 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     name = serializers.CharField(error_messages={"blank": "선택지명은 반드시 입력되어야 합니다."})
 
+    def validate_isCheck(self, value):
+        if not isinstance(value, bool):
+            raise serializers.ValidationError("잘못된 응답값이 입력되었습니다.")
+        return value
+
 
 # Response
 class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Response
         fields = "__all__"
-
-    def validate_isCheck(self, value):
-        if not isinstance(value, bool):
-            raise serializers.ValidationError("잘못된 응답값이 입력되었습니다.")
-        return value
 
 
 # Respondent

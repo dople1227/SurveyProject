@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AnswerItem from './AnswerItem';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,74 +9,72 @@ function AnswerList({
   answers,
   handleAnswersChange,
 }) {
-  const [localAnswerValues, setLocalAnswerList] = useState(answers);
-
+  const [localStateAnswers, setLocalStateAnswers] = useState(answers);
   // 선택지 추가
-  const addAnswer = () => {
+  const onClickAddAnswer = () => {
     const newAnswer = {
       id: uuidv4(),
       answerName: '',
-      questionType: 'checkbox',
-      isCheck: false,
+      isCheck: questionType === 'radio' ? true : false,
     };
-    const updatedAnswer = [...localAnswerValues, newAnswer];
-    setLocalAnswerList(updatedAnswer);
-    handleAnswersChange(updatedAnswer);
+
+    const newStateAnswerss = [...localStateAnswers, newAnswer];
+    setLocalStateAnswers(newStateAnswerss);
+    handleAnswersChange(newStateAnswerss);
   };
 
   // 선택지 삭제
-  const deleteAnswer = (id) => {
-    const updatedAnswers = localAnswerValues.filter(
+  const handleDeleteAnswer = (id) => {
+    const updatedAnswers = localStateAnswers.filter(
       (answer) => answer.id !== id,
     );
-    setLocalAnswerList(updatedAnswers);
+    setLocalStateAnswers(updatedAnswers);
     handleAnswersChange(updatedAnswers);
   };
 
-  // 선택지 변경 시
-  const handleAnswerValue = (id, answerState) => {
+  // 자식컴포넌트(선택지들)의 상태변경 시
+  const handleStateAnswers = (id, updatedAnswers) => {
     // (개선필요) 라디오버튼 change이벤트일 시 기존 true값을 강제로 전부 false로변경
     let tempArr;
-    if (questionType === 'radio' && answerState.type !== 'text') {
-      tempArr = localAnswerValues.map((answer) => {
+    if (questionType === 'radio' && updatedAnswers.type !== 'text') {
+      tempArr = localStateAnswers.map((answer) => {
         return { ...answer, isCheck: false };
       });
-    } else tempArr = localAnswerValues;
+    } else tempArr = localStateAnswers;
 
-    const updatedAnswers = tempArr.map((answer) => {
+    const newAnswers = tempArr.map((answer) => {
       if (answer.id === id) {
-        switch (answerState.type) {
+        switch (updatedAnswers.type) {
           case 'text':
-            return { ...answer, answerName: answerState.value };
+            return { ...answer, answerName: updatedAnswers.value };
           case 'radio':
-            return { ...answer, isCheck: answerState.checked };
+            return { ...answer, isCheck: updatedAnswers.checked };
           default:
-            return { ...answer, isCheck: answerState.checked };
+            return { ...answer, isCheck: updatedAnswers.checked };
         }
       } else {
         return answer;
       }
     });
-
-    setLocalAnswerList(updatedAnswers);
-    handleAnswersChange(updatedAnswers);
+    setLocalStateAnswers(newAnswers);
+    handleAnswersChange(newAnswers);
   };
 
   return (
     <div>
-      {localAnswerValues.map((answer) => (
+      {localStateAnswers.map((answer) => (
         <AnswerItem
           key={answer.id}
           questionType={questionType}
           answer={answer}
-          deleteAnswer={deleteAnswer}
-          handleAnswerValue={handleAnswerValue}
+          handleDeleteAnswer={handleDeleteAnswer}
+          handleStateAnswers={handleStateAnswers}
           questionId={questionId}
         />
       ))}
       <button
         type="button"
-        onClick={addAnswer}
+        onClick={onClickAddAnswer}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-1 "
       >
         선택지추가

@@ -50,13 +50,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
             survey_serializer.is_valid(raise_exception=True)
             survey_instance = survey_serializer.save()
 
-            # Respondent
-            respondent_serializer = RespondentSerializer(
-                data={"phoneNumber": data.get("phoneNumber"), "surveyId": survey_instance.pk}
-            )
-            respondent_serializer.is_valid(raise_exception=True)
-            respondent_instance = respondent_serializer.save()
-
             # Question, Answer, Response
             questions_data = data.get("questions", [])
             for question_data in questions_data:
@@ -73,23 +66,14 @@ class SurveyViewSet(viewsets.ModelViewSet):
                 answers_data = question_data.get("answers", [])
                 for answer_data in answers_data:
                     answer_serializer = AnswerSerializer(
-                        data={"name": answer_data.get("answerName"), "questionId": question_instance.pk}
+                        data={
+                            "name": answer_data.get("answerName"),
+                            "isCheck": answer_data.get("isCheck"),
+                            "questionId": question_instance.pk,
+                        }
                     )
                     answer_serializer.is_valid(raise_exception=True)
                     answer_instance = answer_serializer.save()
-
-                    if answer_data.get("isCheck"):
-                        response_serializer = ResponseSerializer(
-                            data={
-                                "isCheck": answer_data.get("isCheck"),
-                                "surveyId": survey_instance.pk,
-                                "respondentId": respondent_instance.pk,
-                                "questionId": question_instance.pk,
-                                "answerId": answer_instance.pk,
-                            }
-                        )
-                        response_serializer.is_valid(raise_exception=True)
-                        response_serializer.save()
 
         return DRFResponse({"successMessage": "설문지가 정상적으로 등록되었습니다."})
 

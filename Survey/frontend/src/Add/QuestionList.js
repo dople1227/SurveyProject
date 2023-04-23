@@ -4,59 +4,58 @@ import { v4 as uuidv4 } from 'uuid';
 
 // 질문들을 관리하는 컴포넌트
 function QuestionList({ handleQuestionsChange }) {
-  const [localQuestionList, setLocalQuestionList] = useState([]);
+  const [localStateQuestions, setLocalStateQuestions] = useState([]);
 
-  // 질문 추가
-  const addQuestion = () => {
+  // 질문추가
+  const onClickAddQuestion = () => {
     const newQuestion = {
       id: uuidv4(),
       questionName: '',
       questionType: 'checkbox',
       answers: [],
     };
-    const updatedQuestionList = [...localQuestionList, newQuestion];
-    setLocalQuestionList(updatedQuestionList);
-    handleQuestionsChange(updatedQuestionList);
+    const newStateQuestions = [...localStateQuestions, newQuestion];
+    setLocalStateQuestions(newStateQuestions);
+    handleQuestionsChange(newStateQuestions);
   };
 
-  // 질문 삭제
-  const deleteQuestion = (id) => {
-    const updatedQuestionList = localQuestionList.filter(
+  // 질문삭제
+  const handleDeleteQuestion = (id) => {
+    const removeQuestions = localStateQuestions.filter(
       (question) => question.id !== id,
     );
-    setLocalQuestionList(updatedQuestionList);
-    handleQuestionsChange(updatedQuestionList);
+    setLocalStateQuestions(removeQuestions);
+    handleQuestionsChange(removeQuestions);
   };
 
-  // 질문리스트 변경 시
-  const handleQuestions = (id, updatedQuestion) => {
-    const updatedQuestions = localQuestionList.map((question) =>
-      question.id === id ? updatedQuestion : question,
+  // 자식컴포넌트(질문들)의 상태변경 시
+  const handleStateQuestions = (id, updatedQuestions) => {
+    const newQuestions = localStateQuestions.map((question) =>
+      question.id === id ? updatedQuestions : question,
     );
-    setLocalQuestionList(updatedQuestions);
-    handleQuestionsChange(updatedQuestions);
+    setLocalStateQuestions(newQuestions);
+    handleQuestionsChange(newQuestions);
   };
 
   return (
-    <span className="">
+    <div className="">
       <button
         type="button"
-        onClick={addQuestion}
+        onClick={onClickAddQuestion}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-2 py-2  "
       >
         질문추가
       </button>
-      {localQuestionList.map((question) => (
-        <div className="flex flex-row">
+      {localStateQuestions.map((question) => (
+        <div className="flex flex-row" key={question.id}>
           <QuestionItem
-            key={question.id}
             question={question}
-            deleteQuestion={deleteQuestion}
-            handleQuestions={handleQuestions}
+            handleDeleteQuestion={handleDeleteQuestion}
+            handleStateQuestions={handleStateQuestions}
           />
         </div>
       ))}
-    </span>
+    </div>
   );
 }
 
