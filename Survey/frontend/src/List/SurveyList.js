@@ -13,12 +13,12 @@ function SurveyList() {
     page,
   );
 
-  // 페이지 이동
+  // 페이지 이동시 실행
   const handleChangePage = (event, value) => {
     setPage(value);
   };
 
-  // Survey 수정 클릭시 실행되는 함수
+  // 수정하기 클릭 시 실행
   const handleClickModify = (e) => {
     const surveyId = e.target.dataset.surveyid;
     if (surveyId) {
@@ -26,11 +26,12 @@ function SurveyList() {
     }
   };
 
-  // Survey 삭제 클릭시 실행되는 함수
+  // 삭제하기 클릭 시 실행
   const handleClickDelete = (e) => {
     console.log(e);
   };
 
+  // 페이지 로딩 및 에러처리. 추후 컴포넌트로 분리해서 구현
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 

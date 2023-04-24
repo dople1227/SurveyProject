@@ -12,7 +12,7 @@ function SurveyForm() {
   const [isEdit, setIsEdit] = useState(false);
   const { id } = useParams();
 
-  // 파라미터가 변경될 때만 실행
+  // url 파라미터값 변경 시 실행
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -29,54 +29,66 @@ function SurveyForm() {
         } finally {
           setLoading(false);
         }
+      } else {
+        if (isEdit) {
+          setIsEdit(false);
+          window.location.reload();
+        }
       }
     };
     fetchData();
   }, [id]);
 
-  // 자식컴포넌트(질문,선택지)의 상태변경 시
+  // 자식컴포넌트(질문,선택지)의 state변경될 때 실행
   const handleQuestionsChange = (updatedSurvey) => {
     setLocalStateSurvey(updatedSurvey);
   };
 
-  // 설문지 제목변경
+  // 설문지 제목 변경 시 실행
   const onChangeSurveyName = (e) => {
     setSurveyName(e.target.value);
-    setLocalStateSurvey();
   };
 
-  // submit
+  // Submit 버튼클릭 시 실행
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 요청할 데이터 SET
-    const url = isEdit
-      ? `http://localhost:8000/api/survey/${id}/`
-      : 'http://localhost:8000/api/survey/';
-    const method = isEdit ? 'put' : 'post';
+    //추가 or 수정에따라 변경되는 값 SET
+    let url, method, successMessage;
+    if (isEdit) {
+      url = `http://localhost:8000/api/survey/${id}/`;
+      method = 'put';
+      successMessage = '설문지가 수정되었습니다.';
+    } else {
+      url = `http://localhost:8000/api/survey/`;
+      method = 'post';
+      successMessage = '설문지가 생성되었습니다.';
+    }
 
+    // 서버의 CORS 세팅과 일치되도록 SET
     const api = axios.create({
       xsrfCookieName: 'csrftoken',
       xsrfHeaderName: 'X-CSRFToken',
       // withCredentials: true,
     });
+
+    // 백엔드로 전송할 데이터 SET
     const data = {
       surveyName: surveyName,
       questions: localStateSurvey,
     };
-
-    /*  미구현 */
-
-    // axios.post 요청 보내기
+    // console.log(data);
+    // axios.post 요청 실행
     try {
       const response = await api[method](url, data);
-      alert('설문지가 생성되었습니다.');
+      alert(successMessage);
     } catch (error) {
       /*
-        유효성 검사에 실패한 에러메시지만 alert()으로 보여줌
-        유효성 검사 및 알림메시지 설정부분은 백엔드로 구현
-        프론트엔드에선 response.data.errorMessage만 받으면 되는걸로 처리하려했으나
-        DRF의 response 값 세팅부분에 강제로 개입해야 되는거라 1차시도 실패
+        유효성 검사 구현
+        유효성 검사 에러일시에만 alert()
+        유효성 검사 및 알림메시지 설정부분은 백엔드에서 구현
+        프론트엔드에서 response.data.errorMessage 하나만 사용하도록 처리하려했으나
+        프레임워크에서 처리하는 response값 할당부분에 개입해야 되는걸로보여 보류
       */
       if (error.response.data.errorMessage) {
         alert(error.response.data.errorMessage);
@@ -94,6 +106,7 @@ function SurveyForm() {
     }
   };
 
+  // 페이지 로딩 및 에러처리. 추후 컴포넌트로 분리해서 구현
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -124,7 +137,7 @@ function SurveyForm() {
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-2 py-2 "
             >
-              등록하기
+              {isEdit ? '수정하기' : '등록하기'}
             </button>
           </div>
           <div className="flex-col w-1/2"></div>

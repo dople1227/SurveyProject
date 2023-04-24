@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import AnswerItem from './AnswerItem';
 import { v4 as uuidv4 } from 'uuid';
 
-// 질문의 선택지들을 관리하는 컴포넌트
+/*
+  선택지들을 관리하는 컴포넌트. 선택지 동적추가 / 생성 담당
+*/
 function AnswerList({ question, answers, handleAnswersChange }) {
   const [localStateAnswers, setLocalStateAnswers] = useState(answers);
   // 선택지 추가
@@ -10,7 +12,7 @@ function AnswerList({ question, answers, handleAnswersChange }) {
     const newAnswer = {
       answerId: uuidv4(),
       answerName: '',
-      isCheck: question.questionType === 'radio' ? true : false,
+      isCheck: false,
     };
 
     const newStateAnswerss = [...localStateAnswers, newAnswer];
@@ -18,16 +20,16 @@ function AnswerList({ question, answers, handleAnswersChange }) {
     handleAnswersChange(newStateAnswerss);
   };
 
-  // 선택지 삭제
+  // 선택지 삭제 버튼클릭 시 실행
   const handleDeleteAnswer = (answerId) => {
     const updatedAnswers = localStateAnswers.filter((answer) => answer.answerId !== answerId);
     setLocalStateAnswers(updatedAnswers);
     handleAnswersChange(updatedAnswers);
   };
 
-  // 자식컴포넌트(선택지들)의 상태변경 시
+  // 자식컴포넌트(선택지들) state변경 시 실행
   const handleStateAnswers = (answerId, updatedAnswers) => {
-    // 라디오버튼 change이벤트일 시 기존 true값을 강제로 전부 false로변경
+    // 라디오버튼 change이벤트 발생 시 기존 true값을 전부 false로변경
     let tempArr;
     if (question.questionType === 'radio' && updatedAnswers.type !== 'text') {
       tempArr = localStateAnswers.map((answer) => {
@@ -35,6 +37,7 @@ function AnswerList({ question, answers, handleAnswersChange }) {
       });
     } else tempArr = localStateAnswers;
 
+    // 위 결과값에 state의 값을 반영
     const newAnswers = tempArr.map((answer) => {
       if (answer.answerId === answerId) {
         switch (updatedAnswers.type) {
@@ -45,9 +48,7 @@ function AnswerList({ question, answers, handleAnswersChange }) {
           default:
             return { ...answer, isCheck: updatedAnswers.checked };
         }
-      } else {
-        return answer;
-      }
+      } else return answer;
     });
     setLocalStateAnswers(newAnswers);
     handleAnswersChange(newAnswers);

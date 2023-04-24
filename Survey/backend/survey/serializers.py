@@ -1,7 +1,9 @@
 """
--모델객체와 json데이터 간의 변환을 담당
--fields엔 컬럼명을 하나씩 적어도 되지만,
- Model의 필드 전부를 serialize하고싶다면 간단하게 '__all__'만 입력하면 된다.
+- DML, 데이터 가공, 유효성 검사 담당
+- 모델객체와 json데이터 간의 변환을 담당
+- 유효성 검사 담당
+- fields엔 컬럼명을 하나씩 적어도 되지만,
+- Model의 필드 전부를 serialize하고싶다면 간단하게 '__all__'만 입력하면 된다.
 """
 from rest_framework import serializers
 from .models import Survey, Question, Answer, Respondent, Response, Soron
@@ -9,7 +11,7 @@ import re
 import json
 
 
-# 모든 시리얼라이저의 공통부분
+# 시리얼라이저의 공통로직을 구현 (serializers.ModelSerializer대신 BaseSerializer 오버라이드해서 사용하면됨)
 class BaseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # If there are validation errors, return the first error message in response.data.errorMessage
@@ -47,8 +49,9 @@ class SurveySerializer(serializers.ModelSerializer):
 
     # 설문지 리스트에 각 설문지별 문항수 구해서 함께 보내주기
     questionCount = serializers.SerializerMethodField()
+
     def get_questionCount(self, obj):
-        return obj.question_set.count()
+        return obj.question.count()
 
     name = serializers.CharField(error_messages={"blank": "설문지명은 반드시 입력되어야 합니다."})
 

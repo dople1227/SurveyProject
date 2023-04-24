@@ -3,7 +3,7 @@ import AnswerList from './AnswerList';
 
 // 개별 질문을 표시하고 수정하는 컴포넌트
 function QuestionItem({ question, handleDeleteQuestion, handleStateQuestions }) {
-  // 질문제목 변경 시 이벤트
+  // 질문제목 변경 시 실행
   const onChangeTitle = (e) => {
     handleStateQuestions(question.questionId, {
       ...question,
@@ -11,31 +11,31 @@ function QuestionItem({ question, handleDeleteQuestion, handleStateQuestions }) 
     });
   };
 
-  // 질문타입 변경 시 이벤트 (셀렉트박스)
+  // 질문타입 변경 시 실행
   const onChangeQuestionType = (e) => {
-    //질문유형이 변경되면 기존 체크되었던 값들을 전부 false로 초기화하고 첫번째 항목을 true로 변경
-    let updatedAnswers = [];
-    if (e.target.value === 'radio') {
-      updatedAnswers = question.answers.map((answer, index) => ({
-        ...answer,
-        isCheck: index === 0 ? true : false,
-      }));
-    } else {
-      updatedAnswers = question.answers.map((answer) => ({
-        ...answer,
-        isCheck: false,
-      }));
-    }
+    //질문유형 변경 시 기존 체크된 값들을 전부 false로 초기화하고 첫번째 항목을 true로 변경
+    //정상작동안함. 수정필요
+    // let updatedAnswers = [];
+    // if (e.target.value === 'radio') {
+    //   updatedAnswers = question.answers.map((answer, index) => ({
+    //     ...answer,
+    //     isCheck: index === 0 ? true : false,
+    //   }));
+    // } else {
+    //   updatedAnswers = question.answers.map((answer) => ({
+    //     ...answer,
+    //     isCheck: false,
+    //   }));
+    // }
 
-    // 부모 컴포넌트로 전달
+    // 결과 state 부모 컴포넌트로 전달
     handleStateQuestions(question.questionId, {
       ...question,
       questionType: e.target.value,
-      answers: updatedAnswers,
     });
   };
 
-  // 자식컴포넌트(선택지들)의 상태변경 시 이벤트
+  // 자식컴포넌트(선택지들) state변경 시 실행
   const handleAnswersChange = (updatedAnswers) => {
     handleStateQuestions(question.questionId, { ...question, answers: updatedAnswers });
   };

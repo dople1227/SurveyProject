@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { SlWrench } from 'react-icons/sl';
 import { SlTrash } from 'react-icons/sl';
@@ -20,18 +19,10 @@ const SurveyListTable = ({ data, handleClickModify, handleClickDelete }) => {
         <tbody className="divide-y divide-gray-100 border-t border-gray-100">
           {data.map((data) => (
             <tr key={data.surveyId} className="hover:bg-gray-50">
-              <th className="flex gap-3 px-6 py-4 font-normal text-gray-900 ">
-                {data.surveyId}
-              </th>
-              <td className="px-6 py-4 text-sm  whitespace-nowrap ">
-                {data.name}
-              </td>
-              <td className="px-6 py-4 text-sm  whitespace-nowrap ">
-                {data.questionCount}
-              </td>
-              <td className="px-6 py-4 text-sm  whitespace-nowrap ">
-                {data.name}
-              </td>
+              <th className="flex gap-3 px-6 py-4 font-normal text-gray-900 ">{data.surveyId}</th>
+              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.name}</td>
+              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
+              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.name}</td>
               <td className="px-6 py-4">
                 <div className="flex gap-2  ">
                   <div className="">

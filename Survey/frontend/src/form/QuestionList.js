@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import QuestionItem from './QuestionItem';
 import { v4 as uuidv4 } from 'uuid';
 
-// 질문들을 관리하는 컴포넌트
+/*
+  질문들을 관리하는 컴포넌트. 질문 동적추가 / 생성 담당
+*/
 function QuestionList({ handleQuestionsChange, questions }) {
   const [localStateQuestions, setLocalStateQuestions] = useState(questions || []);
 
-  // 질문추가
+  // 질문추가 버튼클릭 시 실행
   const onClickAddQuestion = () => {
     const newQuestion = {
       questionId: uuidv4(),
@@ -19,7 +21,7 @@ function QuestionList({ handleQuestionsChange, questions }) {
     handleQuestionsChange(newStateQuestions);
   };
 
-  // 질문삭제
+  // 질문삭제 버튼클릭 시 실행
   const handleDeleteQuestion = (questionId) => {
     const removeQuestions = localStateQuestions.filter(
       (question) => question.questionId !== questionId,
@@ -28,7 +30,7 @@ function QuestionList({ handleQuestionsChange, questions }) {
     handleQuestionsChange(removeQuestions);
   };
 
-  // 자식컴포넌트(질문들)의 상태변경 시
+  // 자식컴포넌트(질문들) state변경 시 실행
   const handleStateQuestions = (questionId, updatedQuestions) => {
     const newQuestions = localStateQuestions.map((question) =>
       question.questionId === questionId ? updatedQuestions : question,
