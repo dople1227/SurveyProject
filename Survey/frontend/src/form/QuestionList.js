@@ -30,8 +30,6 @@ function QuestionList({ handleQuestionsChange, questions }) {
 
   // 자식컴포넌트(질문들)의 상태변경 시
   const handleStateQuestions = (questionId, updatedQuestions) => {
-    console.log('param1 questionId:' + questionId);
-
     const newQuestions = localStateQuestions.map((question) =>
       question.questionId === questionId ? updatedQuestions : question,
     );

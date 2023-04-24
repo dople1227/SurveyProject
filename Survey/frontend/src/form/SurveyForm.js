@@ -21,7 +21,7 @@ function SurveyForm() {
         const url = `http://localhost:8000/api/survey/${id}/`;
         try {
           const response = await axios.get(url);
-          console.log(response);
+
           const { surveyName, questions } = response.data;
           setSurveyName(surveyName);
           setLocalStateSurvey(questions);
@@ -70,10 +70,8 @@ function SurveyForm() {
 
     // axios.post 요청 보내기
     try {
-      console.log('API 요청 성공:', data);
-      //const response = await api[method](url, data);
+      const response = await api[method](url, data);
       alert('설문지가 생성되었습니다.');
-      // console.log('API 요청 성공:', response.data);
     } catch (error) {
       /*
         유효성 검사에 실패한 에러메시지만 alert()으로 보여줌
