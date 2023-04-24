@@ -17,8 +17,10 @@ urlpatterns = [
     # api/내에 router에 등록된 경로들을 모두 등록
     path("api/", include(router.urls)),
     # add 경로에 대한 라우팅
-    path("add/", TemplateView.as_view(template_name="index.html"), name="add"),
+    path("form/", TemplateView.as_view(template_name="index.html"), name="form"),
     # list 경로에 대한 라우팅
     path("list/", TemplateView.as_view(template_name="index.html"), name="add"),
+    path("detail/", TemplateView.as_view(template_name="index.html"), name="detail"),
+    path("respondent/", TemplateView.as_view(template_name="index.html"), name="respondent"),
     # path('api/survey/create', SurveyCreateAPIView.as_view(), name='survey_create'),
 ]

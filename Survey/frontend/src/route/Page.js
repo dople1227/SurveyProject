@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SurveyList from '../list/SurveyList';
 import SurveyForm from '../form/SurveyForm';
 import SurveyDetail from '../detail/SurveyDetail';
-import User from '../user/User';
+import Respondent from '../respondent/Respondent';
 import Soron from '../soron/Soron';
 import PageNotFound from '../exception/PageNotFound';
 import Navigation from './Navigation';
@@ -18,7 +18,7 @@ function Page() {
         <Route path="/form/" element={<SurveyForm />} />
         <Route path="/form/:id" element={<SurveyForm />} />
         <Route path="/detail/:id" element={<SurveyDetail />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/Responednt" element={<Respondent />} />
         <Route path="/soron" element={<Soron />} />
         <Route path="" element={<PageNotFound />} />
       </Routes>

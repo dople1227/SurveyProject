@@ -3,13 +3,13 @@ import QuestionItem from './QuestionItem';
 import { v4 as uuidv4 } from 'uuid';
 
 // 질문들을 관리하는 컴포넌트
-function QuestionList({ handleQuestionsChange }) {
-  const [localStateQuestions, setLocalStateQuestions] = useState([]);
+function QuestionList({ handleQuestionsChange, questions }) {
+  const [localStateQuestions, setLocalStateQuestions] = useState(questions || []);
 
   // 질문추가
   const onClickAddQuestion = () => {
     const newQuestion = {
-      id: uuidv4(),
+      questionId: uuidv4(),
       questionName: '',
       questionType: 'checkbox',
       answers: [],
@@ -20,18 +20,20 @@ function QuestionList({ handleQuestionsChange }) {
   };
 
   // 질문삭제
-  const handleDeleteQuestion = (id) => {
+  const handleDeleteQuestion = (questionId) => {
     const removeQuestions = localStateQuestions.filter(
-      (question) => question.id !== id,
+      (question) => question.questionId !== questionId,
     );
     setLocalStateQuestions(removeQuestions);
     handleQuestionsChange(removeQuestions);
   };
 
   // 자식컴포넌트(질문들)의 상태변경 시
-  const handleStateQuestions = (id, updatedQuestions) => {
+  const handleStateQuestions = (questionId, updatedQuestions) => {
+    console.log('param1 questionId:' + questionId);
+
     const newQuestions = localStateQuestions.map((question) =>
-      question.id === id ? updatedQuestions : question,
+      question.questionId === questionId ? updatedQuestions : question,
     );
     setLocalStateQuestions(newQuestions);
     handleQuestionsChange(newQuestions);
@@ -47,7 +49,7 @@ function QuestionList({ handleQuestionsChange }) {
         질문추가
       </button>
       {localStateQuestions.map((question) => (
-        <div className="flex flex-row" key={question.id}>
+        <div className="flex flex-row" key={question.questionId}>
           <QuestionItem
             question={question}
             handleDeleteQuestion={handleDeleteQuestion}

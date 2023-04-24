@@ -56,6 +56,11 @@ function SurveyForm() {
       : 'http://localhost:8000/api/survey/';
     const method = isEdit ? 'put' : 'post';
 
+    const api = axios.create({
+      xsrfCookieName: 'csrftoken',
+      xsrfHeaderName: 'X-CSRFToken',
+      withCredentials: true,
+    });
     const data = {
       surveyName: surveyName,
       questions: localStateSurvey,
@@ -65,9 +70,10 @@ function SurveyForm() {
 
     // axios.post 요청 보내기
     try {
-      const response = await axios[method](url, data);
+      console.log('API 요청 성공:', data);
+      //const response = await api[method](url, data);
       alert('설문지가 생성되었습니다.');
-      console.log('API 요청 성공:', response.data);
+      // console.log('API 요청 성공:', response.data);
     } catch (error) {
       /*
         유효성 검사에 실패한 에러메시지만 alert()으로 보여줌
@@ -110,7 +116,10 @@ function SurveyForm() {
               />
             </div>
           </div>
-          <QuestionList handleQuestionsChange={handleQuestionsChange} />
+          <QuestionList
+            handleQuestionsChange={handleQuestionsChange}
+            questions={localStateSurvey}
+          />
         </div>
         <div>
           <div className="flex-col w-1/2 mt-14">

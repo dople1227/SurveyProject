@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import AnswerList from './AnswerList';
 
 // 개별 질문을 표시하고 수정하는 컴포넌트
-function QuestionItem({
-  question,
-  handleDeleteQuestion,
-  handleStateQuestions,
-}) {
+function QuestionItem({ question, handleDeleteQuestion, handleStateQuestions }) {
   // 질문제목 변경 시 이벤트
   const onChangeTitle = (e) => {
-    handleStateQuestions(question.id, {
+    handleStateQuestions(question.questionId, {
       ...question,
       questionName: e.target.value,
     });
@@ -17,7 +13,7 @@ function QuestionItem({
 
   // 질문타입 변경 시 이벤트 (셀렉트박스)
   const onChangeType = (e) => {
-    handleStateQuestions(question.id, {
+    handleStateQuestions(question.questionId, {
       ...question,
       questionType: e.target.value,
     });
@@ -25,7 +21,7 @@ function QuestionItem({
 
   // 자식컴포넌트(선택지들)의 상태변경 시 이벤트
   const handleAnswersChange = (updatedAnswers) => {
-    handleStateQuestions(question.id, { ...question, answers: updatedAnswers });
+    handleStateQuestions(question.questionId, { ...question, answers: updatedAnswers });
   };
 
   return (
@@ -41,7 +37,7 @@ function QuestionItem({
           />
           <button
             type="button"
-            onClick={() => handleDeleteQuestion(question.id)}
+            onClick={() => handleDeleteQuestion(question.questionId)}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-1 "
           >
             질문삭제
@@ -56,10 +52,9 @@ function QuestionItem({
         </div>
         <div className="">
           <AnswerList
-            questionType={question.questionType}
+            question={question}
             answers={question.answers}
             handleAnswersChange={handleAnswersChange}
-            questionId={question.id}
           />
         </div>
       </div>

@@ -31,7 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    ".pythonanywhere.com",
+    "ap-northeast-2.compute.amazonaws.com",
 ]
 
 
@@ -53,10 +53,10 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     # CORS 처리용 미들웨어
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -68,10 +68,14 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://ap-northeast-2.compute.amazonaws.com",
+    "https://ap-northeast-2.compute.amazonaws.com",
 ]
 
 # Cors 에러 방지용 (꼭 필요한지 테스트 필요)
 CORS_ALLOW_CREDENTIALS = True
+# CSRF 토큰 설정
+CSRF_COOKIE_NAME = "csrftoken"
 
 ROOT_URLCONF = "myproject.urls"
 
