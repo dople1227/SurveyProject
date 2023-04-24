@@ -73,7 +73,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
                     "answers": answer_data,
                 }
             )
-            print(response_data)
         return JsonResponse(response_data)
 
     # POST요청 시

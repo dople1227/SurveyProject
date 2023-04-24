@@ -21,7 +21,6 @@ function SurveyForm() {
         const url = `http://localhost:8000/api/survey/${id}/`;
         try {
           const response = await axios.get(url);
-
           const { surveyName, questions } = response.data;
           setSurveyName(surveyName);
           setLocalStateSurvey(questions);
@@ -59,7 +58,7 @@ function SurveyForm() {
     const api = axios.create({
       xsrfCookieName: 'csrftoken',
       xsrfHeaderName: 'X-CSRFToken',
-      withCredentials: true,
+      // withCredentials: true,
     });
     const data = {
       surveyName: surveyName,

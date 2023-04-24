@@ -2,9 +2,6 @@
 import { useState } from 'react';
 
 function AnswerItem({ question, answer, handleDeleteAnswer, handleStateAnswers }) {
-  const [localQuestion, setLocalQuestion] = useState(question);
-  const [localAnswer, setLocalAnswer] = useState(answer);
-
   // 선택지 이름변경 시 이벤트
   const onChangeName = (e) => {
     handleStateAnswers(answer.answerId, e.target);
@@ -12,19 +9,16 @@ function AnswerItem({ question, answer, handleDeleteAnswer, handleStateAnswers }
 
   //체크박스 이벤트
   const onChangeCheckbox = (e) => {
-    setLocalAnswer(e.target.isCheck);
     handleStateAnswers(answer.answerId, e.target);
   };
 
   //라디오버튼 이벤트
   const onChangeRadio = (e) => {
-    setLocalAnswer(e.target.isCheck);
     handleStateAnswers(answer.answerId, e.target);
   };
 
   //셀렉트 이벤트
   const onChangeSelect = (e) => {
-    setLocalAnswer(e.target.isCheck);
     handleStateAnswers(answer.answerId, e.target);
   };
 
@@ -58,7 +52,7 @@ function AnswerItem({ question, answer, handleDeleteAnswer, handleStateAnswers }
               셀렉트에 옵션추가
             </button>
             <select
-              name={localQuestion.questionType + answer.answerId}
+              name={question.questionType + answer.answerId}
               onChange={onChangeSelect}
             ></select>
           </div>

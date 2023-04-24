@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -6,8 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-import { Link } from "react-router-dom";
-
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -52,9 +51,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navigation = () => {
- 
   const pages = ['list', 'form', 'detail', 'user', 'soron'];
- 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -62,12 +59,13 @@ const Navigation = () => {
         <Toolbar>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button 
+              <Button
                 key={page}
-                component={Link} to={page}
+                component={Link}
+                to={page}
                 sx={{ my: 2, color: 'white', display: 'block' }}
-              >        
-                {page}        
+              >
+                {page}
               </Button>
             ))}
           </Box>
@@ -75,10 +73,7 @@ const Navigation = () => {
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
+            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
           </Search>
         </Toolbar>
       </AppBar>

@@ -7,4 +7,5 @@ db.sqlite3
 .DS_Store
 my_settings.py
 *.pem
-/.ssh
+
+.ssh/

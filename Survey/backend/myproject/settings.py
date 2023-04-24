@@ -74,8 +74,10 @@ CORS_ORIGIN_WHITELIST = [
 
 # Cors 에러 방지용 (꼭 필요한지 테스트 필요)
 CORS_ALLOW_CREDENTIALS = True
-# CSRF 토큰 설정
+# CSRF 토큰 헤더 설정
 CSRF_COOKIE_NAME = "csrftoken"
+CSRF_HEADER_NAME = "X-CSRFToken"
+
 
 ROOT_URLCONF = "myproject.urls"
 
