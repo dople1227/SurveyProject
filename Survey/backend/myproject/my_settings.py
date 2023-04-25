@@ -6,7 +6,7 @@ MY_DATABASES = {
         # 'NAME': BASE_DIR / 'db.sqlite3',
         "ENGINE": "django.db.backends.mysql",
         "NAME": "djangodb",
-        "USER": "AlohaAdmin",
+        "USER": "Alohaadmin",
         "PASSWORD": "aloha123!@#",
         "HOST": "localhost",
         "PORT": "3306",
