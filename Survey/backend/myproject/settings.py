@@ -28,7 +28,7 @@ SECRET_KEY = MY_SECRET["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".ap-northeast-2.compute.amazonaws.com", ".amazonaws.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".ap-northeast-2.compute.amazonaws.com", ".amazonaws.com", "15.164.163.67"]
 
 
 # Application definition
@@ -69,12 +69,11 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:8000",
     "http://ap-northeast-2.compute.amazonaws.com:8000",
     "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000",
+    "http://15.164.163.67:8000",
 ]
 
 # Cors 에러 방지용 (꼭 필요한지 테스트 필요)
 CORS_ALLOW_CREDENTIALS = True
-# CSRF 토큰 헤더 설정
-CSRF_COOKIE_NAME = "csrftoken"
 # CSRF_HEADER_NAME = "X-CSRFToken"
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -115,7 +114,7 @@ TEMPLATES = [
 ]
 
 # React 연동 - static자원 사용경로
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "survey/templates")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "survey/static")]
 WSGI_APPLICATION = "myproject.wsgi.application"
 
 
