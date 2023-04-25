@@ -81,7 +81,6 @@ TEMPLATES = [
     },
 ]
 
-# React 연동 - static자원 사용경로
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "survey/static")]
 WSGI_APPLICATION = "myproject.wsgi.application"
 
@@ -146,15 +145,3 @@ LOGGING = {
         "level": "DEBUG",
     },
 }
-# React 연동을 위해 추가
-# WEBPACK_LOADER = {
-#     'DEFAULT': {
-#         'CACHE': not DEBUG,
-#         'BUNDLE_DIR_NAME': 'webpack_bundles/', # must end with slash
-#         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
-#         'POLL_INTERVAL': 0.1,
-#         'TIMEOUT': None,
-#         'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
-#         'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
-#     }
-# }
