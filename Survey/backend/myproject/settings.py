@@ -28,7 +28,14 @@ SECRET_KEY = MY_SECRET["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".ap-northeast-2.compute.amazonaws.com", ".amazonaws.com", "15.164.163.67"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".ap-northeast-2.compute.amazonaws.com",
+    ".amazonaws.com",
+    "15.164.163.67",
+    "ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com",
+]
 
 
 # Application definition
