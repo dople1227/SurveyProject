@@ -6,7 +6,7 @@ MY_DATABASES = {
         "NAME": "djangodb",
         "USER": "AlohaAdmin",
         "PASSWORD": "aloha123!@#",
-        "HOST": "ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com",
+        "HOST": "localhost",
         "PORT": "3306",
     }
 }
