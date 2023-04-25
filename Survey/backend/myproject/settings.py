@@ -66,7 +66,7 @@ MIDDLEWARE = [
     # "survey.middleware.error_response.ErrorResponseMiddleware",
 ]
 # AWS에서 안먹히는듯?
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 # Cors 에러 방지용 (꼭 필요한지 테스트 필요)
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
