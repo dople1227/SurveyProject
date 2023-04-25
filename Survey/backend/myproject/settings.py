@@ -58,23 +58,34 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # "survey.middleware.error_response.ErrorResponseMiddleware",
 ]
+# AWS에서 안먹히는듯?
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Cors 설정. WHITELIST에 등록된 도메인에서만 허용
-# CORS_ORIGIN_WHITELIST = [
-#     "http://localhost:3000",
-#     "http://localhost:8000",
-#     "http://127.0.0.1:8000",
-#     "http://ap-northeast-2.compute.amazonaws.com:8000",
-#     "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000",
-# ]
+# AWS
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://ap-northeast-2.compute.amazonaws.com:8000",
+    "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000",
+    ".ap-northeast-2.compute.amazonaws.com",
+    ".amazonaws.com",
+]
 
 # Cors 에러 방지용 (꼭 필요한지 테스트 필요)
 CORS_ALLOW_CREDENTIALS = True
 # CSRF 토큰 헤더 설정
 CSRF_COOKIE_NAME = "csrftoken"
 # CSRF_HEADER_NAME = "X-CSRFToken"
-
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -86,7 +97,6 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     "x-requested-with",
 ]
-
 ROOT_URLCONF = "myproject.urls"
 
 # DIRS: React build시 index.html이 생성되는경로 지정

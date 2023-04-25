@@ -9,7 +9,7 @@ function SurveyList() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const { data, loading, error, totalPages } = useFetchTable(
-    'http://localhost:8000/api/survey',
+    '"http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000/api/survey',
     {},
     page,
   );
@@ -31,25 +31,17 @@ function SurveyList() {
   const handleClickDelete = async (e) => {
     //axios요청에 필요한 변수 SET
     const surveyId = e.target.dataset.surveyid;
-    const url = `http://localhost:8000/api/survey/${surveyId}/`;
+    const url = `http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000/api/survey/${surveyId}/`;
+    // const url = `http://localhost:8000/api/survey/${surveyId}/`;
     const method = 'delete';
     const successMessage = '설문지가 삭제되었습니다.';
 
-    // 서버의 CORS 세팅과 일치되도록 SET
-    const api = axios.create({
-      xsrfCookieName: 'csrftoken',
-      xsrfHeaderName: 'X-CSRFToken',
-      // withCredentials: true,
-    });
-
     // 백엔드로 전송할 데이터 SET
-    const data = {
-      surveyId: surveyId,
-    };
+    const data = { surveyId: surveyId };
 
     // axios.delete 요청 실행
     try {
-      await api[method](url);
+      await axios[method](url);
       alert(successMessage);
       window.location.reload();
     } catch (error) {

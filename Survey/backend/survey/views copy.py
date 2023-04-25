@@ -44,11 +44,10 @@ class SurveyViewSet(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
 
-    # 페이징처리용
     def get_queryset(self):
         return Survey.objects.order_by("surveyId")
 
-    # GET요청 (SELECT) (특정설문지의 정보 )
+    # 특정 SurveyId의 정보 GET요청
     def retrieve(self, request, pk=None):
         # Survey 테이블에서 surveyId에 해당하는정보 GET
         survey = self.get_object()
@@ -56,7 +55,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
         questions = Question.objects.filter(surveyId=survey.pk)
         # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
         answers = Answer.objects.filter(questionId__in=questions)
-        responder
 
         response_data = {
             "surveyName": survey.name,
@@ -130,47 +128,68 @@ class SurveyViewSet(viewsets.ModelViewSet):
             return DRFResponse({"errorMessage": "존재하지 않는 설문지입니다."}, status=status.HTTP_404_NOT_FOUND)
 
         with transaction.atomic():
-            # Survey 수정
+            # Survey
             survey_serializer = SurveySerializer(survey_instance, data={"name": data.get("surveyName")})
             survey_serializer.is_valid(raise_exception=True)
             survey_instance = survey_serializer.save()
 
-            # 동적으로 질문,응답 생성, 삭제가 가능한 페이지이기에 기존 질문,응답 DELETE
-            question_queryset = Question.objects.filter(surveyId=survey_id)
-            # QuerySet에서 questionId만 추출해서 튜플이 아닌 리스트 형태로 반환(flat=true)
-            question_ids = question_queryset.values_list("questionId", flat=True)
-            # in 연산자를 이용하여 questionId가 question_ids에 있는 레코드를 찾음
-            Answer.objects.filter(questionId__in=question_ids).delete()
-            question_queryset.delete()
-
-            # Question, Answer INSERT
+            # Question, Answer
             questions_data = data.get("questions", [])
             for question_data in questions_data:
                 # Question
-                question_serializer = QuestionSerializer(
-                    data={
-                        "name": question_data.get("questionName"),
-                        "type": question_data.get("questionType"),
-                        "surveyId": survey_instance.pk,
-                    }
-                )
-                question_serializer.is_valid(raise_exception=True)
-                question_instance = question_serializer.save()
+                question_id = question_data.get("questionId", None)
+                new_question = question_data.get("newQuestion", None)
+                # INSERT
+                if new_question:
+                    question_serializer = QuestionSerializer(
+                        data={
+                            "name": question_data.get("questionName"),
+                            "type": question_data.get("questionType"),
+                            "surveyId": survey_instance.pk,
+                        }
+                    )
+                    question_serializer.is_valid(raise_exception=True)
+                    question_instance = question_serializer.save()
+                # UPDATE
+                else:
+                    question_instance = Question.objects.filter(questionId=question_id, surveyId=survey_id).first()
+                    # QuestionSerializer를 이용하여 데이터 시리얼라이즈
+                    question_serializer = QuestionSerializer(
+                        question_instance,
+                        data={
+                            "name": question_data.get("questionName"),
+                            "type": question_data.get("questionType"),
+                            "surveyId": survey_instance.pk,
+                        },
+                        partial=True,  # 일부 필드만 업데이트하기 때문에 partial=True 설정
+                    )
+                    question_serializer.is_valid(raise_exception=True)
+                    question_serializer.save()
 
                 # Answer
                 answers_data = question_data.get("answers", [])
+                # answer_queryset = Answer.objects.filter(questionId=question_id, questionId__surveyId=survey_id)
                 for answer_data in answers_data:
                     answer_id = answer_data.get("answerId")
+                    new_answer = answer_data.get("newAnswer", None)
+                    # INSERT
+                    if new_answer:
+                        answer_serializer = AnswerSerializer(
+                            data={
+                                "name": answer_data.get("answerName"),
+                                "isCheck": answer_data.get("isCheck"),
+                                "questionId": question_instance.pk,
+                            }
+                        )
+                        answer_serializer.is_valid(raise_exception=True)
+                        answer_serializer.save()
+                    # UPDATE
+                    else:
+                        Answer.objects.filter(questionId=question_id, answerId=answer_id).update(
+                            name=answer_data.get("answerName"),
+                            isCheck=answer_data.get("isCheck"),
+                        )
 
-                    answer_serializer = AnswerSerializer(
-                        data={
-                            "name": answer_data.get("answerName"),
-                            "isCheck": answer_data.get("isCheck"),
-                            "questionId": question_instance.pk,
-                        }
-                    )
-                    answer_serializer.is_valid(raise_exception=True)
-                    answer_serializer.save()
                 # UPDATE결과 쓸모없어진 더미 데이터 제거.
                 # answer_ids = [answer["answerId"] for answer in answers_data if answer.get("answerId")]
                 # answer_queryset.exclude(pk__in=answer_ids).delete()
@@ -179,6 +198,18 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
     # DELETE요청 (DELETE)
     def delete_by_surveyId(self, surveyId):
+        #  # Response
+        # Response.objects.filter(surveyId=surveyId).delete()
+
+        # # Respondent
+        # Respondent.objects.filter(surveyId=surveyId).delete()
+
+        # # Question, Answer
+        # questions = Question.objects.filter(surveyId=surveyId)
+        # questionIds = [question.questionId for question in questions]
+        # Answer.objects.filter(questionId__in=questionIds).delete()
+        # Question.objects.filter(surveyId=surveyId).delete()
+
         # Survey
         Survey.objects.filter(surveyId=surveyId).delete()
 

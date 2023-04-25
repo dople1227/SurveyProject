@@ -18,7 +18,7 @@ function SurveyForm() {
       if (id) {
         setLoading(true);
         setIsEdit(true);
-        const url = `http://localhost:8000/api/survey/${id}/`;
+        const url = `http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000/api/survey/${id}/`;
         try {
           const response = await axios.get(url);
           const { surveyName, questions } = response.data;
@@ -53,12 +53,30 @@ function SurveyForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 서버의 CORS 세팅과 일치되도록 SET
-    const api = axios.create({
-      xsrfCookieName: 'csrftoken',
-      xsrfHeaderName: 'X-CSRFToken',
-      // withCredentials: true,
-    });
+    //추가 or 수정에따라 변경되는 값 SET
+    let url, method, successMessage, rtn;
+    if (isEdit) {
+      url = `http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000/api/survey/${id}/`;
+      method = 'put';
+      successMessage = '설문지가 수정되었습니다.';
+
+      let question, answer;
+      // 수정페이지에서 questionId, answerId가 uuidv4형태면 딕셔너리에서 지우는로직 추가
+      for (question of localStateSurvey) {
+        if (isNaN(question.questionId)) {
+          question.newQuestion = 'true';
+        }
+        for (answer of question.answers) {
+          if (isNaN(answer.answerId)) {
+            answer.newAnswer = 'true';
+          }
+        }
+      }
+    } else {
+      url = `http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000/api/survey/`;
+      method = 'post';
+      successMessage = '설문지가 생성되었습니다.';
+    }
 
     // 백엔드로 전송할 데이터 SET
     let data = {
@@ -66,23 +84,11 @@ function SurveyForm() {
       questions: localStateSurvey,
     };
 
-    //추가 or 수정에따라 변경되는 값 SET
-    let url, method, successMessage, rtn;
-    if (isEdit) {
-      url = `http://localhost:8000/api/survey/${id}/`;
-      method = 'put';
-      successMessage = '설문지가 수정되었습니다.';
-
-      // 수정페이지에서 questionId, answerId가 uuidv4형태면 딕셔너리에서 지우는로직 추가
-    } else {
-      url = `http://localhost:8000/api/survey/`;
-      method = 'post';
-      successMessage = '설문지가 생성되었습니다.';
-    }
     // axios.post 요청 실행
     try {
-      const response = await api[method](url, data);
+      const response = await axios[method](url, data);
       alert(successMessage);
+      window.location.reload();
     } catch (error) {
       /*
         유효성 검사 구현

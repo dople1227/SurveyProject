@@ -1,0 +1,112 @@
+{
+  "surveyName": "aaaaaaㅇㅇㅇㅇㅇㅇㅇ111",
+  "questions": [
+    {
+      "questionId": 63,
+      "questionName": "ㄴaaaaaㅇㄹㅈㅈ",
+      "questionType": "checkbox",
+      "answers": [
+        {
+          "answerId": 115,
+          "answerName": "ㄴaaaaaㅇㄹㅈㅈ",
+          "isCheck": true
+        },
+        {
+          "answerId": 116,
+          "answerName": "ㄴaaaaaㅇㄹㅈㅈ",
+          "isCheck": false
+        },
+        {
+          "answerId": 117,
+          "answerName": "ㄴaaaaaㅇㄹㅈㅈ",
+          "isCheck": false
+        }
+      ]
+    },
+    {
+      "questionId": 64,
+      "questionName": "aswwww",
+      "questionType": "checkbox",
+      "answers": [
+        {
+          "answerId": 118,
+          "answerName": "aswwww",
+          "isCheck": true
+        },
+        {
+          "answerId": 119,
+          "answerName": "aswwww",
+          "isCheck": true
+        },
+        {
+          "answerId": 120,
+          "answerName": "aswwww",
+          "isCheck": false
+        }
+      ]
+    }
+  ]
+}
+
+
+
+{
+  "surveyName": "aaaaaaㅇㅇㅇㅇㅇㅇㅇ111",
+  "questions": [
+      {
+          "questionId": 63,
+          "questionName": "ㄴaaaaaㅇㄹㅈㅈ",
+          "questionType": "checkbox",
+          "answers": [
+              {
+                  "answerId": 115,
+                  "answerName": "ㄴaaaaaㅇㄹㅈㅈ",
+                  "isCheck": true
+              },
+              {
+                  "answerId": 116,
+                  "answerName": "ㄴaaaaaㅇㄹㅈㅈ",
+                  "isCheck": false
+              },
+              {
+                  "answerId": 117,
+                  "answerName": "ㄴaaaaaㅇㄹㅈㅈ",
+                  "isCheck": false
+              }
+          ]
+      },
+      {
+          "questionId": 64,
+          "questionName": "aswwww",
+          "questionType": "checkbox",
+          "answers": [
+              {
+                  "answerId": 118,
+                  "answerName": "aswwww",
+                  "isCheck": true
+              },
+              {
+                  "answerId": 119,
+                  "answerName": "aswwww",
+                  "isCheck": true
+              },
+              {
+                  "answerId": 120,
+                  "answerName": "aswwww",
+                  "isCheck": false
+              }
+          ]
+      },
+      {
+          "questionName": "",
+          "questionType": "checkbox",
+          "answers": [
+              {
+                  "answerId": "54f510ed-2b6c-4b55-a1ee-59b55707f804",
+                  "answerName": "",
+                  "isCheck": false
+              }
+          ]
+      }
+  ]
+}
