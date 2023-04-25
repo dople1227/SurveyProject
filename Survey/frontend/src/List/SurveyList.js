@@ -19,6 +19,14 @@ function SurveyList() {
     setPage(value);
   };
 
+  // 설문지명 클릭 시 실행
+  const handleClickDetail = (e) => {
+    const surveyId = e.target.dataset.surveyid;
+    if (surveyId) {
+      navigate(`/detail/${surveyId}`);
+    }
+  };
+
   // 수정하기 클릭 시 실행
   const handleClickModify = (e) => {
     const surveyId = e.target.dataset.surveyid;
@@ -59,6 +67,7 @@ function SurveyList() {
         data={data}
         handleClickModify={handleClickModify}
         handleClickDelete={handleClickDelete}
+        handleClickDetail={handleClickDetail}
       />
       <Pagination count={totalPages} page={page} onChange={handleChangePage} />
     </div>

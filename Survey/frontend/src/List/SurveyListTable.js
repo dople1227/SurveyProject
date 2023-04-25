@@ -2,7 +2,7 @@ import React from 'react';
 import { SlWrench } from 'react-icons/sl';
 import { SlTrash } from 'react-icons/sl';
 
-const SurveyListTable = ({ data, handleClickModify, handleClickDelete }) => {
+const SurveyListTable = ({ data, handleClickModify, handleClickDelete, handleClickDetail }) => {
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
       <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
@@ -20,7 +20,15 @@ const SurveyListTable = ({ data, handleClickModify, handleClickDelete }) => {
           {data.map((data) => (
             <tr key={data.surveyId} className="hover:bg-gray-50">
               <th className="flex gap-3 px-6 py-4 font-normal text-gray-900 ">{data.surveyId}</th>
-              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.name}</td>
+              <td className="px-6 py-4 text-sm  whitespace-nowrap ">
+                <a
+                  className="text-blue-600 "
+                  href={handleClickDetail}
+                  data-surveyid={data.surveyId}
+                >
+                  ${data.name}
+                </a>
+              </td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.name}</td>
               <td className="px-6 py-4">

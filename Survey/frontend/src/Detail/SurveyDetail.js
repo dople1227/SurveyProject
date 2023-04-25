@@ -1,7 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const PageNotFound = () => {
-  return <h2>SurveyDetail.js</h2>;
-};
-
-export default PageNotFound;
+function SurveyDetail() {
+  return <div>HELLO!</div>;
+}
+export default SurveyDetail;
