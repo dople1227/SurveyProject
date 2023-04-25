@@ -69,8 +69,6 @@ CORS_ORIGIN_WHITELIST = [
     "http://127.0.0.1:8000",
     "http://ap-northeast-2.compute.amazonaws.com:8000",
     "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000",
-    ".ap-northeast-2.compute.amazonaws.com",
-    ".amazonaws.com",
 ]
 
 # Cors 에러 방지용 (꼭 필요한지 테스트 필요)
