@@ -28,11 +28,7 @@ SECRET_KEY = MY_SECRET["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    ".ap-northeast-2.compute.amazonaws.com",
-]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".ap-northeast-2.compute.amazonaws.com", ".amazonaws.com"]
 
 
 # Application definition
@@ -63,14 +59,15 @@ MIDDLEWARE = [
     # "survey.middleware.error_response.ErrorResponseMiddleware",
 ]
 CORS_ORIGIN_ALLOW_ALL = True
+
 # Cors 설정. WHITELIST에 등록된 도메인에서만 허용
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://ap-northeast-2.compute.amazonaws.com:8000",
-    "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000",
-]
+# CORS_ORIGIN_WHITELIST = [
+#     "http://localhost:3000",
+#     "http://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "http://ap-northeast-2.compute.amazonaws.com:8000",
+#     "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000",
+# ]
 
 # Cors 에러 방지용 (꼭 필요한지 테스트 필요)
 CORS_ALLOW_CREDENTIALS = True
