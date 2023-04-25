@@ -9,7 +9,7 @@ function SurveyList() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const { data, loading, error, totalPages } = useFetchTable(
-    '"http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/survey',
+    'http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/survey',
     {},
     page,
   );
