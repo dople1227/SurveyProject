@@ -56,7 +56,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
         questions = Question.objects.filter(surveyId=survey.pk)
         # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
         answers = Answer.objects.filter(questionId__in=questions)
-        responder
 
         response_data = {
             "surveyName": survey.name,
