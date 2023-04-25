@@ -62,7 +62,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # "survey.middleware.error_response.ErrorResponseMiddleware",
 ]
-
+CORS_ORIGIN_ALLOW_ALL = True
 # Cors 설정. WHITELIST에 등록된 도메인에서만 허용
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
