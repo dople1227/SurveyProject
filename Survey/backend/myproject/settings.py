@@ -69,6 +69,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://ap-northeast-2.compute.amazonaws.com",
+    "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com",
     "https://ap-northeast-2.compute.amazonaws.com",
 ]
 
@@ -100,7 +101,6 @@ TEMPLATES = [
 
 # React 연동 - static자원 사용경로
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "survey/templates")]
-
 WSGI_APPLICATION = "myproject.wsgi.application"
 
 
