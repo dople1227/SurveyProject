@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.contrib import admin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),    
-    #url요청을 survey/urls.py에서 담당하도록 지정    
+    path("admin/", admin.site.urls),
+    # url요청을 survey/urls.py에서 담당하도록 지정
     path("", include("survey.urls")),
 ]

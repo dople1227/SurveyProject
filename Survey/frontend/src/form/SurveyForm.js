@@ -53,18 +53,6 @@ function SurveyForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //추가 or 수정에따라 변경되는 값 SET
-    let url, method, successMessage;
-    if (isEdit) {
-      url = `http://localhost:8000/api/survey/${id}/`;
-      method = 'put';
-      successMessage = '설문지가 수정되었습니다.';
-    } else {
-      url = `http://localhost:8000/api/survey/`;
-      method = 'post';
-      successMessage = '설문지가 생성되었습니다.';
-    }
-
     // 서버의 CORS 세팅과 일치되도록 SET
     const api = axios.create({
       xsrfCookieName: 'csrftoken',
@@ -73,11 +61,24 @@ function SurveyForm() {
     });
 
     // 백엔드로 전송할 데이터 SET
-    const data = {
+    let data = {
       surveyName: surveyName,
       questions: localStateSurvey,
     };
-    // console.log(data);
+
+    //추가 or 수정에따라 변경되는 값 SET
+    let url, method, successMessage, rtn;
+    if (isEdit) {
+      url = `http://localhost:8000/api/survey/${id}/`;
+      method = 'put';
+      successMessage = '설문지가 수정되었습니다.';
+
+      // 수정페이지에서 questionId, answerId가 uuidv4형태면 딕셔너리에서 지우는로직 추가
+    } else {
+      url = `http://localhost:8000/api/survey/`;
+      method = 'post';
+      successMessage = '설문지가 생성되었습니다.';
+    }
     // axios.post 요청 실행
     try {
       const response = await api[method](url, data);

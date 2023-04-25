@@ -132,57 +132,79 @@ class SurveyViewSet(viewsets.ModelViewSet):
             survey_serializer = SurveySerializer(survey_instance, data={"name": data.get("surveyName")})
             survey_serializer.is_valid(raise_exception=True)
             survey_instance = survey_serializer.save()
+
             # Question, Answer
             questions_data = data.get("questions", [])
-
             for question_data in questions_data:
                 # Question
                 question_id = question_data.get("questionId")
-                try:
-                    # Question모델에서 SurveyId와 전달받은데이터의 questionId가 같은 데이터로 필터하여 인스턴스생성
-                    question_instance = Question.objects.get(pk=question_id, surveyId=survey_id)
-                except Question.DoesNotExist:
-                    question_instance = None
 
-                question_name = question_data.get("questionName")
-                question_type = question_data.get("questionType")
-                question_serializer = QuestionSerializer(
-                    question_instance,
-                    data={
-                        "name": question_name,
-                        "type": question_type,
-                        "surveyId": survey_id,
-                    },
-                )
+                filter_kwargs = {"surveyId": survey_id}
+                updated_values = {"name": question_data.get("questionName"), "type": question_data.get("questionType")}
 
-                question_serializer.is_valid(raise_exception=True)
-                question_instance = question_serializer.save()
+                if question_data.get("questionId"):
+                    Question.objects.filter(questionId=question_id, surveyId=survey_id).update(
+                        name=question_data.get("questionName"),
+                        type=question_data.get("questionType"),
+                    )
+                else:
+                    Question.objects.filter(surveyId=survey_id).create(
+                        name=question_data.get("questionName"),
+                        type=question_data.get("questionType"),
+                        questionId=Question.pk,
+                    )
+
+                # obj, create = Question.objects.filter(surveyId=survey_id, questionId=question_id) if question_id.isnumeric() else Question.objects.filter(surveyId=survey_id)
+                # obj, created = Question.objects.filter(surveyId=survey_id, questionId=question_id).update_or_create(
+                #     surveyId=survey_id,
+                #     defaults=updated_values,
+                # )
+                # question_serialize = QuestionSerializer(obj, data=updated_values)
+                # question_serialize.is_valid(raise_exception=True)
 
                 # Answer
                 answers_data = question_data.get("answers", [])
-                answer_queryset = Answer.objects.filter(questionId=question_id, questionId__surveyId=survey_id)
 
+                # answer_queryset = Answer.objects.filter(questionId=question_id, questionId__surveyId=survey_id)
                 for answer_data in answers_data:
                     answer_id = answer_data.get("answerId")
-                    name = answer_data.get("answerName")
-                    is_check = answer_data.get("isCheck")
-                    try:
-                        answer_instance = Answer.objects.get(questionId=question_id, answerId=answer_id)
-                    except Answer.DoesNotExist:
-                        answer_instance = None
-
-                    answer_serializer = AnswerSerializer(
-                        answer_instance,
-                        data={"isCheck": is_check, "name": name, "questionId": question_id},
+                    data = {
+                        "answer_id": answer_data.get("answerId"),
+                        "name": answer_data.get("answerName"),
+                        "isCheck": answer_data.get("isCheck"),
+                    }
+                    obj, created = Answer.objects.filter(questionId=question_id).update_or_create(
+                        answerId=answer_id,
+                        questionId=question_id,
+                        defaults=updated_values,
                     )
-                    answer_serializer.is_valid(raise_exception=True)
-                    answer_serializer.save()
+                    # answer_serialize = AnswerSerializer(obj, data=updated_values)
+                    # answer_serialize.is_valid(raise_exception=True)
 
                 # UPDATE결과 쓸모없어진 더미 데이터 제거
-                answer_ids = [answer["answerId"] for answer in answers_data if answer.get("answerId")]
-                answer_queryset.exclude(pk__in=answer_ids).delete()
+                # answer_ids = [answer["answerId"] for answer in answers_data if answer.get("answerId")]
+                # answer_queryset.exclude(pk__in=answer_ids).delete()
 
         return DRFResponse({"successMessage": "설문지가 정상적으로 등록되었습니다."})
+
+    # DELETE요청 (DELETE)
+    def delete_by_surveyId(self, surveyId):
+        #  # Response
+        # Response.objects.filter(surveyId=surveyId).delete()
+
+        # # Respondent
+        # Respondent.objects.filter(surveyId=surveyId).delete()
+
+        # # Question, Answer
+        # questions = Question.objects.filter(surveyId=surveyId)
+        # questionIds = [question.questionId for question in questions]
+        # Answer.objects.filter(questionId__in=questionIds).delete()
+        # Question.objects.filter(surveyId=surveyId).delete()
+
+        # Survey
+        Survey.objects.filter(surveyId=surveyId).delete()
+
+        return DRFResponse({"successMessage": "설문지가 정상적으로 삭제되었습니다."})
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

@@ -31,7 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "ap-northeast-2.compute.amazonaws.com",
+    "13.125.163.12",
 ]
 
 
@@ -85,7 +85,7 @@ ROOT_URLCONF = "myproject.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["../frontend/build"],
+        "DIRS": [os.path.join(BASE_DIR, "survey/templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -99,7 +99,7 @@ TEMPLATES = [
 ]
 
 # React 연동 - static자원 사용경로
-STATICFILES_DIRS = ("../frontend/build/static",)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "survey/templates")]
 
 WSGI_APPLICATION = "myproject.wsgi.application"
 

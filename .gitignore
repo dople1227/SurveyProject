@@ -3,9 +3,8 @@
 __pycache__
 myvenv
 db.sqlite3
-/static
 .DS_Store
-my_settings.py
+
 *.pem
 
 .ssh/
