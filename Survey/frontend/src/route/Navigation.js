@@ -51,7 +51,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navigation = () => {
-  const pages = ['list', 'form', 'detail', 'user', 'soron'];
+  const pages = ['list', 'form', 'detail', 'response', 'soron'];
 
   return (
     <Box sx={{ flexGrow: 1 }}>

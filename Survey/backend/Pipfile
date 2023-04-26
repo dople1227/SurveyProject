@@ -9,7 +9,6 @@ django = "*"
 mysqlclient = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
-django-webpack-loader = "*"
 black = "*"
 
 [dev-packages]

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a6853a1999bb934b6081a2e4a0398d5393084e015d94424a6ddefbf49fe39570"
+            "sha256": "8cb7b473c55455268a1244df0cb3109d0871348cc7853be750f538f9cd9ac136"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -87,14 +87,6 @@
             "index": "pypi",
             "version": "==3.14.0"
         },
-        "django-webpack-loader": {
-            "hashes": [
-                "sha256:073beda18e2929fa5cd83bafbcaaf975e5945e84a17bfa81927cb6c9f5a17b94",
-                "sha256:2d50a902256cf94bdd87eac3e7687989c9aa757a63af21db68773115216cedee"
-            ],
-            "index": "pypi",
-            "version": "==1.8.1"
-        },
         "djangorestframework": {
             "hashes": [
                 "sha256:579a333e6256b09489cbe0a067e66abe55c6595d8926be6b99423786334350c8",
@@ -150,11 +142,11 @@
         },
         "platformdirs": {
             "hashes": [
-                "sha256:d5b638ca397f25f979350ff789db335903d7ea010ab28903f57b27e1b16c2b08",
-                "sha256:ebe11c0d7a805086e99506aa331612429a72ca7cd52a1f0d277dc4adc20cb10e"
+                "sha256:64370d47dc3fca65b4879f89bdead8197e93e05d696d6d1816243ebae8595da5",
+                "sha256:ea61fd7b85554beecbbd3e9b37fb26689b227ffae38f73353cbcc1cf8bd01878"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.2.0"
+            "version": "==3.3.0"
         },
         "pytz": {
             "hashes": [

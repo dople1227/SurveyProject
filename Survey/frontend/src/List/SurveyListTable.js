@@ -2,7 +2,13 @@ import React from 'react';
 import { SlWrench } from 'react-icons/sl';
 import { SlTrash } from 'react-icons/sl';
 
-const SurveyListTable = ({ data, handleClickModify, handleClickDelete, handleClickDetail }) => {
+const SurveyListTable = ({
+  data,
+  handleClickModify,
+  handleClickDelete,
+  handleClickDetail,
+  handleClickResponse,
+}) => {
   return (
     <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
       <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
@@ -21,13 +27,13 @@ const SurveyListTable = ({ data, handleClickModify, handleClickDelete, handleCli
             <tr key={data.surveyId} className="hover:bg-gray-50">
               <th className="flex gap-3 px-6 py-4 font-normal text-gray-900 ">{data.surveyId}</th>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">
-                <a
+                <button
                   className="text-blue-600 "
-                  href={handleClickDetail}
+                  onClick={handleClickDetail}
                   data-surveyid={data.surveyId}
                 >
                   ${data.name}
-                </a>
+                </button>
               </td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.name}</td>
@@ -39,7 +45,7 @@ const SurveyListTable = ({ data, handleClickModify, handleClickDelete, handleCli
                       onClick={handleClickModify}
                       data-surveyid={data.surveyId}
                     >
-                      수정하기
+                      수정
                     </button>
                   </div>
                   <div>
@@ -48,7 +54,16 @@ const SurveyListTable = ({ data, handleClickModify, handleClickDelete, handleCli
                       onClick={handleClickDelete}
                       data-surveyid={data.surveyId}
                     >
-                      삭제하기
+                      삭제
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      className="focus:ring-2 focus:ring-offset-2  focus:ring-red-300 text-sm leading-none text-gray-600 py-3 px-5 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none"
+                      onClick={handleClickResponse}
+                      data-surveyid={data.surveyId}
+                    >
+                      응답
                     </button>
                   </div>
                 </div>
