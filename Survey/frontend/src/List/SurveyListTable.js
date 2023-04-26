@@ -36,7 +36,7 @@ const SurveyListTable = ({
                 </button>
               </td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
-              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.name}</td>
+              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
               <td className="px-6 py-4">
                 <div className="flex gap-2  ">
                   <div className="">
