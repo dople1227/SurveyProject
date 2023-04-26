@@ -21,6 +21,7 @@ urlpatterns = [
     # api/내에 router에 등록된 경로들을 모두 등록
     path("api/", include(router.urls)),
     # add 경로에 대한 라우팅
+    path("form/", TemplateView.as_view(template_name="index.html"), name="form"),
     path("form/<int:pk>", TemplateView.as_view(template_name="index.html"), name="form"),
     # list 경로에 대한 라우팅
     path("list/", TemplateView.as_view(template_name="index.html"), name="add"),
