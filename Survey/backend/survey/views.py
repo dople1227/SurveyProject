@@ -18,6 +18,7 @@ from .serializers import (
     RespondentSerializer,
     ResponseSerializer,
     SoronSerializer,
+    DetailSerializer,
 )
 from .models import Survey, Question, Answer, Respondent, Response, Soron
 from rest_framework import viewsets
@@ -202,6 +203,43 @@ class RespondentViewSet(viewsets.ModelViewSet):
 class ResponseViewSet(viewsets.ModelViewSet):
     queryset = Response.objects.all()
     serializer_class = ResponseSerializer
+
+
+class DetailViewSet(viewsets.ModelViewSet):
+    queryset = Survey.objects.all()
+    serializer_class = DetailSerializer
+
+    # Survey 테이블에서 surveyId에 해당하는정보 GET
+    def retrieve(self, request, pk=None):
+        survey = self.get_object()
+        # Question 테이블에서 surveyId에 해당하는정보 GET
+        questions = Question.objects.filter(surveyId=survey.pk)
+        # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
+        answers = Answer.objects.filter(questionId__in=questions)
+
+        response_data = {
+            "surveyName": survey.name,
+            "questions": [],
+        }
+        for question in questions:
+            answer_data = []
+            for answer in answers.filter(questionId=question):
+                answer_data.append(
+                    {
+                        "answerId": answer.answerId,
+                        "answerName": answer.name,
+                        "isCheck": answer.isCheck,
+                    }
+                )
+            response_data["questions"].append(
+                {
+                    "questionId": question.questionId,
+                    "questionName": question.name,
+                    "questionType": question.type,
+                    "answers": answer_data,
+                }
+            )
+        return JsonResponse(response_data)
 
 
 class SoronViewSet(viewsets.ModelViewSet):

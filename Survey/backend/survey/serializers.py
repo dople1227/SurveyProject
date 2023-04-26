@@ -111,3 +111,10 @@ class RespondentSerializer(serializers.ModelSerializer):
         if not re.match(r"^\d{9,11}$", value):
             raise serializers.ValidationError("전화번호는 하이픈 제외 9~11자리여야 합니다.")
         return value
+
+
+# Detail
+class DetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Survey
+        fields = "__all__"

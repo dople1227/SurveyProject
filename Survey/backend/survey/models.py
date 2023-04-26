@@ -51,7 +51,6 @@ class Respondent(models.Model):
 
 class Response(models.Model):
     responseId = models.AutoField(primary_key=True)
-
     surveyId = models.ForeignKey(Survey, on_delete=models.CASCADE, related_name="response")
     respondentId = models.ForeignKey(Respondent, on_delete=models.CASCADE, related_name="response")
     questionId = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="response")

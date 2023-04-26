@@ -17,7 +17,6 @@ function Page() {
         <Route exact path="/list" element={<SurveyList />} />
         <Route path="/form" element={<SurveyForm />} />
         <Route path="/form/:id" element={<SurveyForm />} />
-        <Route path="/detail/" element={<SurveyDetail />} />
         <Route path="/detail/:id" element={<SurveyDetail />} />
         <Route path="/response" element={<Response />} />
         <Route path="/response/:id" element={<Response />} />
