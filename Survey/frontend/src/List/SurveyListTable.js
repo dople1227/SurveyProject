@@ -32,7 +32,7 @@ const SurveyListTable = ({
                   onClick={handleClickDetail}
                   data-surveyid={data.surveyId}
                 >
-                  ${data.name}
+                  {data.name}
                 </button>
               </td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
