@@ -9,7 +9,8 @@ function SurveyList() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const { data, loading, error, totalPages } = useFetchTable(
-    'http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/survey',
+    // process.env.REACT_APP_API_URL + '/api/survey',
+    process.env.REACT_APP_API_URL + '/list',
     {},
     page,
   );
@@ -39,7 +40,7 @@ function SurveyList() {
   const handleClickDelete = async (e) => {
     //axios요청에 필요한 변수 SET
     const surveyId = e.target.dataset.surveyid;
-    const url = `http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/survey/${surveyId}/`;
+    const url = process.env.REACT_APP_API_URL + `/api/survey/${surveyId}/`;
     // const url = `http://localhost:8000/api/survey/${surveyId}/`;
     const method = 'delete';
     const successMessage = '설문지가 삭제되었습니다.';
@@ -67,7 +68,7 @@ function SurveyList() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div>
+    <div className="m-8">
       <SurveyListTable
         data={data}
         handleClickModify={handleClickModify}

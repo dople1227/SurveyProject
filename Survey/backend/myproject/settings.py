@@ -83,6 +83,7 @@ ROOT_URLCONF = "myproject.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+        # "DIRS": [os.path.join(BASE_DIR, "../frontend/build")],
         "DIRS": [os.path.join(BASE_DIR, "survey/templates")],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -96,6 +97,7 @@ TEMPLATES = [
     },
 ]
 
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "../frontend/build/static")]
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "survey/static")]
 WSGI_APPLICATION = "myproject.wsgi.application"
 
@@ -150,7 +152,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 5,
+    "PAGE_SIZE": 10,
 }
 
 # DEBUG를 위해

@@ -10,14 +10,14 @@ const SurveyListTable = ({
   handleClickResponse,
 }) => {
   return (
-    <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+    <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-2">
       <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-4 font-medium text-gray-900">번호</th>
             <th className="px-6 py-4 font-medium text-gray-900">이름</th>
             <th className="px-6 py-4 font-medium text-gray-900">문항수</th>
-            <th className="px-6 py-4 font-medium text-gray-900">응답자수</th>
+            <th className="px-6 py-4 font-medium text-gray-900">응답수</th>
             <th className="px-6 py-4 font-medium text-gray-900">Icons</th>
             <th></th>
           </tr>
@@ -27,16 +27,12 @@ const SurveyListTable = ({
             <tr key={data.surveyId} className="hover:bg-gray-50">
               <th className="flex gap-3 px-6 py-4 font-normal text-gray-900 ">{data.surveyId}</th>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">
-                <button
-                  className="text-blue-600 "
-                  onClick={handleClickDetail}
-                  data-surveyid={data.surveyId}
-                >
+                <button className="" onClick={handleClickDetail} data-surveyid={data.surveyId}>
                   {data.name}
                 </button>
               </td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
-              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
+              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.answerCount}</td>
               <td className="px-6 py-4">
                 <div className="flex gap-2  ">
                   <div className="">

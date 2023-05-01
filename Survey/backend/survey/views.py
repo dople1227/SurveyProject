@@ -9,6 +9,7 @@ update: PUT 요청으로 기존 리소스 수정
 delete: DELETE 요청으로 기존 리소스 삭제
 """
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view, action
 from django.shortcuts import render
 from .serializers import (
@@ -20,8 +21,8 @@ from .serializers import (
     SoronSerializer,
     DetailSerializer,
 )
-from .models import Survey, Question, Answer, Respondent, Response, Soron
-from rest_framework import viewsets
+from .models import Survey, Question, Answer, Response, Respondent, Soron
+from rest_framework import viewsets, pagination
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from functools import wraps
@@ -30,11 +31,22 @@ from django.db import transaction
 from rest_framework.response import Response as DRFResponse
 from django.db.models import Count
 from django.http import JsonResponse
+from django.db.models import Count
+from rest_framework.pagination import PageNumberPagination
 
 
-# 장고서버에서 build된 리액트 파일 실행 (localhost:8000)
-def survey_list(request):
-    return render(request, "index.html", {})
+# 페이징처리를 위해 response.data.count변수값 설정
+class CustomPagination(PageNumberPagination):
+    page_size = 5
+
+    def get_paginated_response(self, data):
+        return DRFResponse(
+            {
+                "count": self.page.paginator.count,
+                "results": data,
+                #  "page_range": list(self.page.paginator.page_range),
+            }
+        )
 
 
 # logger 사용
@@ -44,24 +56,20 @@ logger = logging.getLogger(__name__)
 class SurveyViewSet(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
-
-    # 페이징처리용
-    def get_queryset(self):
-        return Survey.objects.order_by("surveyId")
+    pagination_class = CustomPagination
 
     # GET요청 (SELECT) (특정설문지의 정보 )
-    def retrieve(self, request, pk=None):
+    def detail_view(self, request, pk=None):
+        print("detail")
         # Survey 테이블에서 surveyId에 해당하는정보 GET
         survey = self.get_object()
+        # survey = Survey.objects.filter(surveyId=pk).first()
         # Question 테이블에서 surveyId에 해당하는정보 GET
         questions = Question.objects.filter(surveyId=survey.pk)
         # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
         answers = Answer.objects.filter(questionId__in=questions)
 
-        response_data = {
-            "surveyName": survey.name,
-            "questions": [],
-        }
+        response_data = {"surveyId": survey.surveyId, "surveyName": survey.name, "questions": []}
         for question in questions:
             answer_data = []
             for answer in answers.filter(questionId=question):
@@ -82,7 +90,59 @@ class SurveyViewSet(viewsets.ModelViewSet):
             )
         return JsonResponse(response_data)
 
-    # POST요청 (CREATE)
+    # GET요청
+    def list_view(self, request):
+        surveys = self.queryset.order_by("surveyId")
+        paginater = CustomPagination()
+        result_page = paginater.paginate_queryset(surveys, request)
+        response_data = []
+
+        for survey in result_page:
+            # Question 테이블에서 surveyId에 해당하는정보 GET
+            questions = Question.objects.filter(surveyId=survey.surveyId)
+            # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
+            answers = Answer.objects.filter(questionId__in=questions)
+            survey_data = {
+                "surveyId": survey.surveyId,
+                "name": survey.name,
+                "questionCount": questions.count(),
+                "answerCount": answers.count(),
+            }
+            response_data.append(survey_data)
+        return paginater.get_paginated_response(response_data)
+
+    # GET요청 (설문지 수정 시 필요한 해당 설문지의 정보 GET)
+    def retrieve(self, request, pk=None):
+        print("retrieve")
+        # Survey 테이블에서 surveyId에 해당하는정보 GET
+        survey = self.get_object()
+        # Question 테이블에서 surveyId에 해당하는정보 GET
+        questions = Question.objects.filter(surveyId=survey.pk)
+        # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
+        answers = Answer.objects.filter(questionId__in=questions)
+
+        response_data = {"surveyName": survey.name, "questions": []}
+        for question in questions:
+            answer_data = []
+            for answer in answers.filter(questionId=question):
+                answer_data.append(
+                    {
+                        "answerId": answer.answerId,
+                        "answerName": answer.name,
+                        "isCheck": answer.isCheck,
+                    }
+                )
+            response_data["questions"].append(
+                {
+                    "questionId": question.questionId,
+                    "questionName": question.name,
+                    "questionType": question.type,
+                    "answers": answer_data,
+                }
+            )
+        return JsonResponse(response_data)
+
+    # POST요청 (CREATE) (설문지 생성)
     def create(self, request, *args, **kwargs):
         data = request.data
         with transaction.atomic():
@@ -119,7 +179,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
                     answer_serializer.save()
         return DRFResponse({"successMessage": "설문지가 정상적으로 등록되었습니다."})
 
-    # PUT요청 (UPDATE)
+    # PUT요청 (UPDATE) (설문지 수정)
     def update(self, request, *args, **kwargs):
         survey_id = kwargs.get("pk")
         data = request.data
@@ -171,13 +231,10 @@ class SurveyViewSet(viewsets.ModelViewSet):
                     )
                     answer_serializer.is_valid(raise_exception=True)
                     answer_serializer.save()
-                # UPDATE결과 쓸모없어진 더미 데이터 제거.
-                # answer_ids = [answer["answerId"] for answer in answers_data if answer.get("answerId")]
-                # answer_queryset.exclude(pk__in=answer_ids).delete()
 
         return DRFResponse({"successMessage": "설문지가 정상적으로 등록되었습니다."})
 
-    # DELETE요청 (DELETE)
+    # DELETE요청 (DELETE) (설문지 삭제)
     def delete_by_surveyId(self, surveyId):
         # Survey
         Survey.objects.filter(surveyId=surveyId).delete()
@@ -210,7 +267,7 @@ class DetailViewSet(viewsets.ModelViewSet):
     serializer_class = DetailSerializer
 
     # Survey 테이블에서 surveyId에 해당하는정보 GET
-    def retrieve(self, request, pk=None):
+    def detail(self, request, pk=None):
         survey = self.get_object()
         # Question 테이블에서 surveyId에 해당하는정보 GET
         questions = Question.objects.filter(surveyId=survey.pk)
@@ -219,6 +276,7 @@ class DetailViewSet(viewsets.ModelViewSet):
 
         response_data = {
             "surveyName": survey.name,
+            "test": 1,
             "questions": [],
         }
         for question in questions:

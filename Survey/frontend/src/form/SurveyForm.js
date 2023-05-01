@@ -18,7 +18,7 @@ function SurveyForm() {
       if (id) {
         setLoading(true);
         setIsEdit(true);
-        const url = `http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/survey/${id}/`;
+        const url = process.env.REACT_APP_API_URL + `/api/survey/${id}/`;
         try {
           const response = await axios.get(url);
           const { surveyName, questions } = response.data;
@@ -56,7 +56,7 @@ function SurveyForm() {
     //추가 or 수정에따라 변경되는 값 SET
     let url, method, successMessage, rtn;
     if (isEdit) {
-      url = `http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/survey/${id}/`;
+      url = process.env.REACT_APP_API_URL + `/api/survey/${id}/`;
       method = 'put';
       successMessage = '설문지가 수정되었습니다.';
 
@@ -73,7 +73,7 @@ function SurveyForm() {
         }
       }
     } else {
-      url = `http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/survey/`;
+      url = process.env.REACT_APP_API_URL + `/api/survey/`;
       method = 'post';
       successMessage = '설문지가 생성되었습니다.';
     }

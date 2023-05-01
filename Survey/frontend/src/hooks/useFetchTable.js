@@ -12,6 +12,7 @@ function useFetchTable(url, params, page) {
       try {
         //get 요청
         const response = await axios.get(url, { params: { ...params, page } });
+        // console.log(response);
         setData(response.data.results);
         setTotalPages(Math.ceil(response.data.count / 5));
       } catch (e) {

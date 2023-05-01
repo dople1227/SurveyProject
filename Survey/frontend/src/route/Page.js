@@ -13,7 +13,7 @@ function Page() {
     <Router>
       <Navigation />
       <Routes>
-        <Route exact path="/" element={<Soron />} />
+        <Route exact path="/" element={<SurveyList />} />
         <Route exact path="/list" element={<SurveyList />} />
         <Route path="/form" element={<SurveyForm />} />
         <Route path="/form/:id" element={<SurveyForm />} />
