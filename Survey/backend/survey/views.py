@@ -31,7 +31,7 @@ from rest_framework.pagination import PageNumberPagination
 
 # 페이징처리를 위해 response.data.count변수값 설정
 class CustomPagination(PageNumberPagination):
-    page_size = 5
+    page_size = 10
 
     def get_paginated_response(self, data):
         return DRFResponse(
@@ -302,34 +302,56 @@ class DetailViewSet(viewsets.ModelViewSet):
 
     # GET요청 (SELECT) (특정설문지의 정보 )
     def detail_view(self, request, pk=None):
-        print("detail")
         # Survey 테이블에서 surveyId에 해당하는정보 GET
         survey = self.get_object()
+        survey_id = survey.pk
         # survey = Survey.objects.filter(surveyId=pk).first()
         # Question 테이블에서 surveyId에 해당하는정보 GET
-        questions = Question.objects.filter(surveyId=survey.pk)
+        questions = Question.objects.filter(surveyId=survey_id)
         # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
         answers = Answer.objects.filter(questionId__in=questions)
+        # Respondent 테이블에서 surveyId가 RespondentId에 해당하는 정보 GET
+        respondents = Respondent.objects.filter(surveyId=survey_id)
+        # Responses 테이블에서
+        responses = Response.objects.filter(surveyId=survey_id)
 
-        response_data = {"surveyId": survey.surveyId, "surveyName": survey.name, "questions": []}
-        for question in questions:
-            answer_data = []
-            for answer in answers.filter(questionId=question):
-                answer_data.append(
+        response_data = {"surveyId": survey.surveyId, "surveyName": survey.name, "responses": []}
+
+        for respondent in respondents:
+            respondent_data = {
+                "respondentId": respondent.respondentId,
+                "phoneNumber": respondent.phoneNumber,
+                "questions": [],
+            }
+            for question in questions:
+                answer_data = []
+                for answer in answers.filter(questionId=question):
+                    answer_data.append(
+                        {
+                            "answerId": answer.answerId,
+                            "answerName": answer.name,
+                            "isCheck": Response.objects.filter(
+                                surveyId=survey_id,
+                                respondentId=respondent.respondentId,
+                                questionId=question.questionId,
+                                answerId=answer.answerId,
+                            )
+                            .first()
+                            .isCheck,
+                        }
+                    )
+
+                respondent_data["questions"].append(
                     {
-                        "answerId": answer.answerId,
-                        "answerName": answer.name,
+                        "questionId": question.questionId,
+                        "questionName": question.name,
+                        "questionType": question.type,
+                        "answers": answer_data,
                     }
                 )
 
-            response_data["questions"].append(
-                {
-                    "questionId": question.questionId,
-                    "questionName": question.name,
-                    "questionType": question.type,
-                    "answers": answer_data,
-                }
-            )
+            response_data["responses"].append(respondent_data)
+
         return JsonResponse(response_data)
 
 

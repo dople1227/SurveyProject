@@ -14,7 +14,7 @@ function useFetchTable(url, params, page) {
         const response = await axios.get(url, { params: { ...params, page } });
         // console.log(response);
         setData(response.data.results);
-        setTotalPages(Math.ceil(response.data.count / 5));
+        setTotalPages(Math.ceil(response.data.count / 10));
       } catch (e) {
         setError(e);
       } finally {

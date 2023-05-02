@@ -9,7 +9,7 @@ function SurveyDetail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { id } = useParams();
-  const [localStateDetail, setLocalStateDetail] = useState();
+  const [localStateResponses, setLocalStateResponses] = useState();
   const [surveyName, setSurveyName] = useState('');
 
   useEffect(() => {
@@ -20,9 +20,10 @@ function SurveyDetail() {
         const url = process.env.REACT_APP_API_URL + `/detail/${id}`;
         try {
           const response = await axios.get(url);
+
+          console.log(response);
           setSurveyName(response.data.surveyName);
-          setLocalStateDetail(response.data);
-          // console.log(localStateDetail);
+          setLocalStateResponses(response.data.responses);
         } catch (e) {
           setError(e);
         } finally {
@@ -37,7 +38,7 @@ function SurveyDetail() {
 
   // 자식컴포넌트(질문,선택지)의 state변경될 때 실행
   const handleStateChange = (updatedSurvey) => {
-    setLocalStateDetail(updatedSurvey);
+    setLocalStateResponses(updatedSurvey);
   };
 
   // 페이지 로딩 및 에러처리. 추후 컴포넌트로 분리해서 구현
@@ -46,18 +47,33 @@ function SurveyDetail() {
 
   return (
     <div className="m-10">
-      <div className="shadow-xl rounded px-6 py-6 ">
-        <h1 className="py-4">{surveyName}</h1>
-
-        {localStateDetail.responses?.map((response, index) => (
-          <SurveyDetailItem
-            survey={localStateDetail}
-            handleStateChange={handleStateChange}
-            readonly={true}
-          />
-        ))}
+      <div className="shadow-md rounded px-6 py-6 ">
+        <h1 className="">{surveyName}</h1>
+        <div className="flex flex-wrap ">
+          {localStateResponses?.map((response, index) => (
+            <div
+              className="px-4 py-4 mr-8 mt-8 bg-orange-100 shadow-xl"
+              key={response.respondentId}
+            >
+              <div className="flex ">
+                <div className="flex pr-2">{index + 1}번째응답자 :</div>
+                <div className="flex ">{response.phoneNumber}</div>
+              </div>
+              {/* {response?.respondent_data.map((survey, index) => ( */}
+              <SurveyDetailItem
+                key={index}
+                survey={response}
+                handleStateChange={handleStateChange}
+                readonly={true}
+                respondentId={response.respondentId}
+              />
+              {/* ))} */}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
+
 export default SurveyDetail;

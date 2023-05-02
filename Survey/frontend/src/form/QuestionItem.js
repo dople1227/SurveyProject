@@ -27,7 +27,7 @@ function QuestionItem({ question, handleDeleteQuestion, handleStateQuestions }) 
 
   return (
     <div className="">
-      <div className="mt-14 flex flex-wrap">
+      <div className="mt-14 flex">
         <div className=" flex-col mb-2">
           <input
             type="text"

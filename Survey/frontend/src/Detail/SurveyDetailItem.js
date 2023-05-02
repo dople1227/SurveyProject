@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // 설문지에 대한 상세 내용을 보여주는 컴포넌트
-function SurveyDetailItem({ survey, handleStateChange, readonly }) {
+function SurveyDetailItem({ survey, handleStateChange, readonly, respondentId }) {
   const [localStateSurvey, setlocalStateSurvey] = useState(survey || []);
 
   //라디오버튼 이벤트
@@ -84,19 +84,29 @@ function SurveyDetailItem({ survey, handleStateChange, readonly }) {
               <div className="flex px-3" key={answer.answerId}>
                 {question.questionType === 'checkbox' && (
                   <input
-                    id={answer.answerId}
+                    className=""
+                    id={respondentId ? 'res' + respondentId + answer.answerId : answer.answerId}
                     type={question.questionType}
                     checked={answer.isCheck || false}
-                    name={question.questionId}
+                    name={
+                      respondentId
+                        ? 'res' + respondentId + question.questionId
+                        : question.questionId
+                    }
                     onChange={onChangeCheck}
                   />
                 )}
                 {question.questionType === 'radio' && (
                   <input
-                    id={answer.answerId}
+                    className=""
+                    id={respondentId ? 'res' + respondentId + answer.answerId : answer.answerId}
                     type={question.questionType}
                     checked={answer.isCheck || false}
-                    name={question.questionId}
+                    name={
+                      respondentId
+                        ? 'res' + respondentId + question.questionId
+                        : question.questionId
+                    }
                     onChange={onChangeRadio}
                   />
                 )}

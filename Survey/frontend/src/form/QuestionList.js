@@ -41,22 +41,24 @@ function QuestionList({ handleQuestionsChange, questions }) {
 
   return (
     <div className="">
-      <button
-        type="button"
-        onClick={onClickAddQuestion}
-        className="mt-2 bg-transparent hover:bg-blue-500 text-blue-500  hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded  "
-      >
-        질문추가
-      </button>
-      {localStateQuestions.map((question) => (
-        <div className="flex flex-row" key={question.questionId}>
-          <QuestionItem
-            question={question}
-            handleDeleteQuestion={handleDeleteQuestion}
-            handleStateQuestions={handleStateQuestions}
-          />
-        </div>
-      ))}
+      <div className="">
+        <button
+          type="button"
+          onClick={onClickAddQuestion}
+          className="mt-2 bg-transparent hover:bg-blue-500 text-blue-500  hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded  "
+        >
+          질문추가
+        </button>
+        {localStateQuestions.map((question) => (
+          <div className="" key={question.questionId}>
+            <QuestionItem
+              question={question}
+              handleDeleteQuestion={handleDeleteQuestion}
+              handleStateQuestions={handleStateQuestions}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
