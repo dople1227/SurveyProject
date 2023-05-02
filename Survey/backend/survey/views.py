@@ -50,43 +50,10 @@ logger = logging.getLogger(__name__)
 class SurveyViewSet(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
-    pagination_class = CustomPagination
-
-    # GET요청 (SELECT) (특정설문지의 정보 )
-    def detail_view(self, request, pk=None):
-        print("detail")
-        # Survey 테이블에서 surveyId에 해당하는정보 GET
-        survey = self.get_object()
-        # survey = Survey.objects.filter(surveyId=pk).first()
-        # Question 테이블에서 surveyId에 해당하는정보 GET
-        questions = Question.objects.filter(surveyId=survey.pk)
-        # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
-        answers = Answer.objects.filter(questionId__in=questions)
-
-        response_data = {"surveyId": survey.surveyId, "surveyName": survey.name, "questions": []}
-        for question in questions:
-            answer_data = []
-            for answer in answers.filter(questionId=question):
-                answer_data.append(
-                    {
-                        "answerId": answer.answerId,
-                        "answerName": answer.name,
-                        "isCheck": answer.isCheck,
-                    }
-                )
-            response_data["questions"].append(
-                {
-                    "questionId": question.questionId,
-                    "questionName": question.name,
-                    "questionType": question.type,
-                    "answers": answer_data,
-                }
-            )
-        return JsonResponse(response_data)
 
     # GET요청
     def list_view(self, request):
-        surveys = self.queryset.order_by("surveyId")
+        surveys = self.queryset.order_by("-surveyId")
         paginater = CustomPagination()
         result_page = paginater.paginate_queryset(surveys, request)
         response_data = []
@@ -96,11 +63,15 @@ class SurveyViewSet(viewsets.ModelViewSet):
             questions = Question.objects.filter(surveyId=survey.surveyId)
             # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
             answers = Answer.objects.filter(questionId__in=questions)
+            # Response 테이블에서 surveyId에 해당하는정보 GET
+            respondent = Respondent.objects.filter(surveyId=survey.surveyId)
+
             survey_data = {
                 "surveyId": survey.surveyId,
                 "name": survey.name,
                 "questionCount": questions.count(),
                 "answerCount": answers.count(),
+                "respondentCount": respondent.count(),
             }
             response_data.append(survey_data)
         return paginater.get_paginated_response(response_data)
@@ -123,7 +94,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
                     {
                         "answerId": answer.answerId,
                         "answerName": answer.name,
-                        "isCheck": answer.isCheck,
                     }
                 )
             response_data["questions"].append(
@@ -165,7 +135,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
                     answer_serializer = AnswerSerializer(
                         data={
                             "name": answer_data.get("answerName"),
-                            "isCheck": answer_data.get("isCheck"),
                             "questionId": question_instance.pk,
                         }
                     )
@@ -219,7 +188,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
                     answer_serializer = AnswerSerializer(
                         data={
                             "name": answer_data.get("answerName"),
-                            "isCheck": answer_data.get("isCheck"),
                             "questionId": question_instance.pk,
                         }
                     )
@@ -255,24 +223,17 @@ class ResponseViewSet(viewsets.ModelViewSet):
     queryset = Response.objects.all()
     serializer_class = ResponseSerializer
 
-
-class DetailViewSet(viewsets.ModelViewSet):
-    queryset = Survey.objects.all()
-    serializer_class = DetailSerializer
-
-    # Survey 테이블에서 surveyId에 해당하는정보 GET
-    def detail(self, request, pk=None):
-        survey = self.get_object()
+    # GET요청 (SELECT) (특정설문지의 정보 )
+    def response_view(self, request, pk=None):
+        # Survey 테이블에서 surveyId에 해당하는정보 GET
+        # survey = self.get_object()
+        survey = Survey.objects.filter(surveyId=pk).first()
         # Question 테이블에서 surveyId에 해당하는정보 GET
         questions = Question.objects.filter(surveyId=survey.pk)
         # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
         answers = Answer.objects.filter(questionId__in=questions)
 
-        response_data = {
-            "surveyName": survey.name,
-            "test": 1,
-            "questions": [],
-        }
+        response_data = {"surveyId": survey.surveyId, "surveyName": survey.name, "questions": []}
         for question in questions:
             answer_data = []
             for answer in answers.filter(questionId=question):
@@ -280,9 +241,87 @@ class DetailViewSet(viewsets.ModelViewSet):
                     {
                         "answerId": answer.answerId,
                         "answerName": answer.name,
-                        "isCheck": answer.isCheck,
                     }
                 )
+
+            response_data["questions"].append(
+                {
+                    "questionId": question.questionId,
+                    "questionName": question.name,
+                    "questionType": question.type,
+                    "answers": answer_data,
+                }
+            )
+        return JsonResponse(response_data)
+
+    # POST요청 (CREATE) (응답 생성)
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        survey_id = data.get("surveyId")
+        phone_number = data.get("phoneNumber")
+        respondent = Respondent.objects.filter(surveyId=survey_id, phoneNumber=phone_number).first()
+
+        if not respondent:
+            with transaction.atomic():
+                # Respondent
+                respondent_serializer = RespondentSerializer(data={"phoneNumber": phone_number, "surveyId": survey_id})
+                respondent_serializer.is_valid(raise_exception=True)
+                respondent_instance = respondent_serializer.save()
+
+                # survey = Survey.objects.filter(surveyId=survey_id)
+                # questions = Question.objects.filter(surveyId=survey_id)
+                # answers = Answer.objects.filter(questionId__in=questions)
+
+                # Response
+                questions_data = data.get("questions", [])
+                for question in questions_data:
+                    question_id = question.get("questionId")
+                    answers_data = question.get("answers", [])
+                    for answer in answers_data:
+                        answer_id = answer.get("answerId")
+                        isCheck = answer.get("isCheck", False)
+                        response_serializer = ResponseSerializer(
+                            data={
+                                "surveyId": survey_id,
+                                "respondentId": respondent_instance.pk,
+                                "questionId": question_id,
+                                "answerId": answer_id,
+                                "isCheck": isCheck,
+                            }
+                        )
+                        response_serializer.is_valid(raise_exception=True)
+                        response_serializer.save()
+                return DRFResponse({"successMessage": "설문지가 정상적으로 등록되었습니다."})
+        else:
+            return DRFResponse({"errorMessage": "이미 해당 설문지에 응답했습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class DetailViewSet(viewsets.ModelViewSet):
+    queryset = Survey.objects.all()
+    serializer_class = DetailSerializer
+
+    # GET요청 (SELECT) (특정설문지의 정보 )
+    def detail_view(self, request, pk=None):
+        print("detail")
+        # Survey 테이블에서 surveyId에 해당하는정보 GET
+        survey = self.get_object()
+        # survey = Survey.objects.filter(surveyId=pk).first()
+        # Question 테이블에서 surveyId에 해당하는정보 GET
+        questions = Question.objects.filter(surveyId=survey.pk)
+        # Answer 테이블에서 questionId가 questions테이블에 있는Id로만 GET
+        answers = Answer.objects.filter(questionId__in=questions)
+
+        response_data = {"surveyId": survey.surveyId, "surveyName": survey.name, "questions": []}
+        for question in questions:
+            answer_data = []
+            for answer in answers.filter(questionId=question):
+                answer_data.append(
+                    {
+                        "answerId": answer.answerId,
+                        "answerName": answer.name,
+                    }
+                )
+
             response_data["questions"].append(
                 {
                     "questionId": question.questionId,

@@ -10,6 +10,7 @@ function SurveyDetail() {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const [localStateDetail, setLocalStateDetail] = useState();
+  const [surveyName, setSurveyName] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +20,7 @@ function SurveyDetail() {
         const url = process.env.REACT_APP_API_URL + `/detail/${id}`;
         try {
           const response = await axios.get(url);
+          setSurveyName(response.data.surveyName);
           setLocalStateDetail(response.data);
           // console.log(localStateDetail);
         } catch (e) {
@@ -44,7 +46,17 @@ function SurveyDetail() {
 
   return (
     <div className="m-10">
-      <SurveyDetailItem survey={localStateDetail} handleStateChange={handleStateChange} />
+      <div className="shadow-xl rounded px-6 py-6 ">
+        <h1 className="py-4">{surveyName}</h1>
+
+        {localStateDetail.responses?.map((response, index) => (
+          <SurveyDetailItem
+            survey={localStateDetail}
+            handleStateChange={handleStateChange}
+            readonly={true}
+          />
+        ))}
+      </div>
     </div>
   );
 }

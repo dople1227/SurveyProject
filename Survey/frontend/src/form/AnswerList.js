@@ -12,7 +12,6 @@ function AnswerList({ question, answers, handleAnswersChange }) {
     const newAnswer = {
       answerId: uuidv4(),
       answerName: '',
-      isCheck: false,
     };
 
     const newStateAnswerss = [...localStateAnswers, newAnswer];
@@ -29,25 +28,10 @@ function AnswerList({ question, answers, handleAnswersChange }) {
 
   // 자식컴포넌트(선택지들) state변경 시 실행
   const handleStateAnswers = (answerId, updatedAnswers) => {
-    // 라디오버튼 change이벤트 발생 시 기존 true값을 전부 false로변경
-    let tempArr;
-    if (question.questionType === 'radio' && updatedAnswers.type !== 'text') {
-      tempArr = localStateAnswers.map((answer) => {
-        return { ...answer, isCheck: false };
-      });
-    } else tempArr = localStateAnswers;
-
     // 위 결과값에 state의 값을 반영
-    const newAnswers = tempArr.map((answer) => {
+    const newAnswers = localStateAnswers.map((answer) => {
       if (answer.answerId === answerId) {
-        switch (updatedAnswers.type) {
-          case 'text':
-            return { ...answer, answerName: updatedAnswers.value };
-          case 'radio':
-            return { ...answer, isCheck: updatedAnswers.checked };
-          default:
-            return { ...answer, isCheck: updatedAnswers.checked };
-        }
+        return { ...answer, answerName: updatedAnswers.value };
       } else return answer;
     });
     setLocalStateAnswers(newAnswers);
@@ -68,7 +52,7 @@ function AnswerList({ question, answers, handleAnswersChange }) {
       <button
         type="button"
         onClick={onClickAddAnswer}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-1 "
+        className="mt- bg-transparent hover:bg-blue-500 text-blue-500  hover:text-white px-2 border border-blue-500 hover:border-transparent rounded  "
       >
         선택지추가
       </button>

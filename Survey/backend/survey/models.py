@@ -19,7 +19,6 @@ class Question(models.Model):
     TYPE_CHOICES = [
         ("checkbox", "Checkbox"),
         ("radio", "Radio"),
-        ("select", "Select"),
     ]
     questionId = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
@@ -33,7 +32,7 @@ class Question(models.Model):
 class Answer(models.Model):
     answerId = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
-    isCheck = models.BooleanField()
+    # isCheck = models.BooleanField()
     questionId = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answer")
 
     def __str__(self):
@@ -55,6 +54,7 @@ class Response(models.Model):
     respondentId = models.ForeignKey(Respondent, on_delete=models.CASCADE, related_name="response")
     questionId = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="response")
     answerId = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name="response")
+    isCheck = models.BooleanField()
 
     def __str__(self):
         return str(self.responseId)

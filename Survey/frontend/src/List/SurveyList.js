@@ -22,7 +22,7 @@ function SurveyList() {
 
   // 설문지명 클릭 시 실행
   const handleClickDetail = (e) => {
-    const surveyId = e.target.dataset.surveyid;
+    const surveyId = e.currentTarget.dataset.surveyid;
     if (surveyId) {
       navigate(`/detail/${surveyId}`);
     }
@@ -30,7 +30,7 @@ function SurveyList() {
 
   // 수정클릭 시 실행
   const handleClickModify = (e) => {
-    const surveyId = e.target.dataset.surveyid;
+    const surveyId = e.currentTarget.dataset.surveyid;
     if (surveyId) {
       navigate(`/form/${surveyId}`);
     }
@@ -39,7 +39,7 @@ function SurveyList() {
   // 삭제클릭 시 실행
   const handleClickDelete = async (e) => {
     //axios요청에 필요한 변수 SET
-    const surveyId = e.target.dataset.surveyid;
+    const surveyId = e.currentTarget.dataset.surveyid;
     const url = process.env.REACT_APP_API_URL + `/api/survey/${surveyId}/`;
     // const url = `http://localhost:8000/api/survey/${surveyId}/`;
     const method = 'delete';
@@ -57,7 +57,7 @@ function SurveyList() {
 
   // 응답클릭 클릭 시 실행
   const handleClickResponse = (e) => {
-    const surveyId = e.target.dataset.surveyid;
+    const surveyId = e.currentTarget.dataset.surveyid;
     if (surveyId) {
       navigate(`/response/${surveyId}`);
     }

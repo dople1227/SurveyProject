@@ -91,21 +91,6 @@ class RespondentSerializer(serializers.ModelSerializer):
         model = Respondent
         fields = "__all__"
 
-    phoneNumber = serializers.CharField(error_messages={"blank": "전화번호를 입력해주세요."})
-
-    def validate_phoneNumber(self, value):
-        if not value:
-            raise serializers.ValidationError("전화번호를 입력해주세요.")
-        # 공백과 하이픈 제거
-        value = value.strip().replace("-", "")
-        # 숫자가 아닌 문자를 포함하고 있는 경우
-        if not value.isdigit():
-            raise serializers.ValidationError("전화번호는 숫자만 입력 가능합니다.")
-        # 9~11자리 숫자 형태인지 검사
-        if not re.match(r"^\d{9,11}$", value):
-            raise serializers.ValidationError("전화번호는 하이픈 제외 9~11자리여야 합니다.")
-        return value
-
 
 # Detail
 class DetailSerializer(serializers.ModelSerializer):

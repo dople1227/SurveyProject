@@ -13,21 +13,6 @@ function QuestionItem({ question, handleDeleteQuestion, handleStateQuestions }) 
 
   // 질문타입 변경 시 실행
   const onChangeQuestionType = (e) => {
-    //질문유형 변경 시 기존 체크된 값들을 전부 false로 초기화하고 첫번째 항목을 true로 변경
-    //정상작동안함. 수정필요
-    // let updatedAnswers = [];
-    // if (e.target.value === 'radio') {
-    //   updatedAnswers = question.answers.map((answer, index) => ({
-    //     ...answer,
-    //     isCheck: index === 0 ? true : false,
-    //   }));
-    // } else {
-    //   updatedAnswers = question.answers.map((answer) => ({
-    //     ...answer,
-    //     isCheck: false,
-    //   }));
-    // }
-
     // 결과 state 부모 컴포넌트로 전달
     handleStateQuestions(question.questionId, {
       ...question,
@@ -49,12 +34,12 @@ function QuestionItem({ question, handleDeleteQuestion, handleStateQuestions }) 
             placeholder="질문을 입력하세요"
             value={question.questionName}
             onChange={onChangeTitle}
-            className="border border-gray-300 focus:outline-none focus:border-blue-700 mr-2"
+            className="shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-teal-500 mr-2"
           />
           <button
             type="button"
             onClick={() => handleDeleteQuestion(question.questionId)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-1 "
+            className="mt-2 bg-transparent hover:bg-blue-500 text-blue-500 hover:text-white px-2 border border-blue-500 hover:border-transparent rounded"
           >
             질문삭제
           </button>
@@ -63,7 +48,7 @@ function QuestionItem({ question, handleDeleteQuestion, handleStateQuestions }) 
           <select value={question.questionType} onChange={onChangeQuestionType}>
             <option value="checkbox">Checkbox</option>
             <option value="radio">Radio</option>
-            <option value="select">Select</option>
+            {/* <option value="select">Select</option> */}
           </select>
         </div>
         <div className="">

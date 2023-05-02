@@ -1,6 +1,5 @@
 import React from 'react';
-import { SlWrench } from 'react-icons/sl';
-import { SlTrash } from 'react-icons/sl';
+import { SlWrench, SlTrash, SlPencil } from 'react-icons/sl';
 
 const SurveyListTable = ({
   data,
@@ -17,6 +16,7 @@ const SurveyListTable = ({
             <th className="px-6 py-4 font-medium text-gray-900">번호</th>
             <th className="px-6 py-4 font-medium text-gray-900">이름</th>
             <th className="px-6 py-4 font-medium text-gray-900">문항수</th>
+            <th className="px-6 py-4 font-medium text-gray-900">선택지수</th>
             <th className="px-6 py-4 font-medium text-gray-900">응답수</th>
             <th className="px-6 py-4 font-medium text-gray-900">Icons</th>
             <th></th>
@@ -33,33 +33,34 @@ const SurveyListTable = ({
               </td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.questionCount}</td>
               <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.answerCount}</td>
+              <td className="px-6 py-4 text-sm  whitespace-nowrap ">{data.respondentCount}</td>
               <td className="px-6 py-4">
                 <div className="flex gap-2  ">
                   <div className="">
                     <button
-                      className="focus:ring-2 focus:ring-offset-2  focus:ring-red-300 text-sm leading-none text-gray-600 py-3 px-5 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none"
+                      className="bg-transparent hover:bg-blue-500 text-blue-500  hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
                       onClick={handleClickModify}
                       data-surveyid={data.surveyId}
                     >
-                      수정
+                      <SlWrench></SlWrench>
                     </button>
                   </div>
                   <div>
                     <button
-                      className="focus:ring-2 focus:ring-offset-2  focus:ring-red-300 text-sm leading-none text-gray-600 py-3 px-5 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none"
+                      className="bg-transparent hover:bg-blue-500 text-blue-500 hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
                       onClick={handleClickDelete}
                       data-surveyid={data.surveyId}
                     >
-                      삭제
+                      <SlTrash></SlTrash>
                     </button>
                   </div>
                   <div>
                     <button
-                      className="focus:ring-2 focus:ring-offset-2  focus:ring-red-300 text-sm leading-none text-gray-600 py-3 px-5 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none"
+                      className="bg-transparent hover:bg-blue-500 text-blue-500  hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
                       onClick={handleClickResponse}
                       data-surveyid={data.surveyId}
                     >
-                      응답
+                      <SlPencil></SlPencil>
                     </button>
                   </div>
                 </div>

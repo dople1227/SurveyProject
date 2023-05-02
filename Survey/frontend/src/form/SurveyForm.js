@@ -59,19 +59,6 @@ function SurveyForm() {
       url = process.env.REACT_APP_API_URL + `/api/survey/${id}/`;
       method = 'put';
       successMessage = '설문지가 수정되었습니다.';
-
-      let question, answer;
-      // 수정페이지에서 questionId, answerId가 uuidv4형태면 딕셔너리에서 지우는로직 추가
-      for (question of localStateSurvey) {
-        if (isNaN(question.questionId)) {
-          question.newQuestion = 'true';
-        }
-        for (answer of question.answers) {
-          if (isNaN(answer.answerId)) {
-            answer.newAnswer = 'true';
-          }
-        }
-      }
     } else {
       url = process.env.REACT_APP_API_URL + `/api/survey/`;
       method = 'post';
@@ -129,7 +116,7 @@ function SurveyForm() {
                 placeholder="설문지 이름"
                 value={surveyName}
                 onChange={onChangeSurveyName}
-                className="border border-gray-300 focus:outline-none focus:border-blue-700"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-teal-500"
               />
             </div>
           </div>
@@ -138,16 +125,16 @@ function SurveyForm() {
             questions={localStateSurvey}
           />
         </div>
-        <div>
+        <div className="flex justify-center, align-middle">
           <div className="flex-col w-1/2 mt-14">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-2 py-2 "
+              className="bg-transparent hover:bg-blue-500 text-blue-500  hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
             >
               {isEdit ? '수정하기' : '등록하기'}
             </button>
           </div>
-          <div className="flex-col w-1/2"></div>
+          <div className="flex-col w-1/2 mt-14"></div>
         </div>
       </form>
     </div>

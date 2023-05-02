@@ -44,7 +44,7 @@ function QuestionList({ handleQuestionsChange, questions }) {
       <button
         type="button"
         onClick={onClickAddQuestion}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-2 py-2  "
+        className="mt-2 bg-transparent hover:bg-blue-500 text-blue-500  hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded  "
       >
         질문추가
       </button>
