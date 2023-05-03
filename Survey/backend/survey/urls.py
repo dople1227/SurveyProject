@@ -14,7 +14,7 @@ router.register(r"detail", views.DetailViewSet)
 router.register(r"response", views.ResponseViewSet)
 
 urlpatterns = [
-    path("", views.SurveyViewSet.as_view({"get": "list_view"}), name="list"),
+    path("", TemplateView.as_view(template_name="index.html"), name="add"),
     path("list/", views.SurveyViewSet.as_view({"get": "list_view"}), name="list"),
     path("response/<int:pk>/", views.ResponseViewSet.as_view({"get": "response_view"}), name="response"),
     path("detail/<int:pk>/", views.DetailViewSet.as_view({"get": "detail_view"}), name="detail"),
