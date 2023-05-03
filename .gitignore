@@ -5,4 +5,5 @@ myvenv
 db.sqlite3
 .DS_Store
 *.pem
-Survey/backend/myproject/my_settings.py
+my_settings.py
+.env
