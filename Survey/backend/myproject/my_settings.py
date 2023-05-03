@@ -6,7 +6,7 @@ MY_DATABASES = {
         "NAME": "djangodb",
         "USER": "AlohaAdmin",
         "PASSWORD": "aloha123!@#",
-        # "HOST": "43.201.114.17",
+        # "HOST": "3.35.233.46",
         "HOST": "localhost",
         "PORT": "3306",
     }
