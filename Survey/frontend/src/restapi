@@ -1,0 +1,65 @@
+{
+  "respondents": []
+
+  
+  "phoneNumber": "123456123",
+  "questions": {
+    "surveyId": 59,
+    "surveyName": "설문지 2",
+    "questions": [
+      {
+        "questionId": 127,
+        "questionName": "질문11",
+        "questionType": "checkbox",
+        "answers": [
+          {
+            "answerId": 328,
+            "answerName": "선택지1"
+          },
+          {
+            "answerId": 329,
+            "answerName": "선택지2",
+            "isCheck": true
+          }
+        ]
+      },
+      {
+        "questionId": 128,
+        "questionName": "질문22",
+        "questionType": "radio",
+        "answers": [
+          {
+            "answerId": 330,
+            "answerName": "선택지11",
+            "isCheck": true
+          },
+          {
+            "answerId": 331,
+            "answerName": "선택지22",
+            "isCheck": false
+          }
+        ]
+      },
+      {
+        "questionId": 129,
+        "questionName": "질문3",
+        "questionType": "checkbox",
+        "answers": [
+          {
+            "answerId": 332,
+            "answerName": "선택지111"
+          },
+          {
+            "answerId": 333,
+            "answerName": "선택지222",
+            "isCheck": true
+          },
+          {
+            "answerId": 334,
+            "answerName": "선택지333"
+          }
+        ]
+      }
+    ]
+  }
+}
