@@ -7,3 +7,4 @@ db.sqlite3
 *.pem
 my_settings.py
 .env
+settings.py
