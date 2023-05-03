@@ -75,7 +75,6 @@ function SurveyForm() {
     try {
       const response = await axios[method](url, data);
       alert(successMessage);
-      window.location.reload(false);
     } catch (error) {
       /*
         유효성 검사 구현

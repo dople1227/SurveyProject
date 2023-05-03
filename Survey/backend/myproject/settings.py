@@ -32,9 +32,6 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     ".ap-northeast-2.compute.amazonaws.com",
-    ".amazonaws.com",
-    "15.164.163.67",
-    "ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com",
 ]
 
 
@@ -74,8 +71,6 @@ CORS_ORIGIN_WHITELIST = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://ap-northeast-2.compute.amazonaws.com:8000",
-    "http://ec2-43-200-172-153.ap-northeast-2.compute.amazonaws.com:8000",
-    "http://15.164.163.67:8000",
 ]
 ROOT_URLCONF = "myproject.urls"
 

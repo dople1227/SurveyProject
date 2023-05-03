@@ -10,7 +10,7 @@ function SurveyList() {
   const [page, setPage] = useState(1);
   const { data, loading, error, totalPages } = useFetchTable(
     // process.env.REACT_APP_API_URL + '/api/survey',
-    process.env.REACT_APP_API_URL + '/list',
+    process.env.REACT_APP_API_URL + '/api/list',
     {},
     page,
   );
@@ -49,7 +49,6 @@ function SurveyList() {
     try {
       await axios[method](url);
       alert(successMessage);
-      setPage(page);
       window.location.reload(false);
     } catch (error) {
       console.error('API 요청 실패:', error);

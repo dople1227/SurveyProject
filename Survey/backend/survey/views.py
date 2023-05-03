@@ -53,7 +53,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     serializer_class = SurveySerializer
 
     # GET요청
-    def list_view(self, request):
+    def list(self, request):
         surveys = self.queryset.order_by("-surveyId")
         paginater = CustomPagination()
         result_page = paginater.paginate_queryset(surveys, request)
@@ -225,7 +225,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
     serializer_class = ResponseSerializer
 
     # GET요청 (SELECT) (특정설문지의 정보 )
-    def response_view(self, request, pk=None):
+    def retrieve(self, request, pk=None):
         # Survey 테이블에서 surveyId에 해당하는정보 GET
         # survey = self.get_object()
         survey = Survey.objects.filter(surveyId=pk).first()
@@ -302,7 +302,7 @@ class DetailViewSet(viewsets.ModelViewSet):
     serializer_class = DetailSerializer
 
     # GET요청 (SELECT) (특정설문지의 정보 )
-    def detail_view(self, request, pk=None):
+    def retrieve(self, request, pk=None):
         # Survey 테이블에서 surveyId에 해당하는정보 GET
         survey = self.get_object()
         survey_id = survey.pk

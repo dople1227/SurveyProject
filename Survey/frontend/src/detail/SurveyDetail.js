@@ -17,7 +17,7 @@ function SurveyDetail() {
       if (id) {
         setLoading(true);
         // const url = `http://ec2-15-164-163-67.ap-northeast-2.compute.amazonaws.com:8000/api/detail/${id}/`;
-        const url = process.env.REACT_APP_API_URL + `/detail/${id}`;
+        const url = process.env.REACT_APP_API_URL + `/api/detail/${id}`;
         try {
           const response = await axios.get(url);
           setSurveyName(response.data.surveyName);
